@@ -34,8 +34,8 @@ class MahasiswaForm
                     ->image()
                     ->disk('public')
                     ->directory('mahasiswa') // folder penyimpanan di storage/app/public/mahasiswa
-                    ->preserveFilenames()
-                    ->maxSize(2048), // max 2MB
+                    ->preserveFilenames(),
+
 
                 TextInput::make('instagram')
                     ->label('Instagram')

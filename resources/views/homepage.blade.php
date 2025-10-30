@@ -15,18 +15,12 @@
     }
 </style>
 
-
-
-<!-- Hero Section -->
 <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50">
+  <!-- Icons Container -->
+  <div class="absolute inset-0 z-0" id="home-icons-container"></div>
+
   <!-- Content -->
   <div class="relative z-10 text-center px-6 sm:px-8">
-  <img src="{{ asset('assets/docker-icon.png') }}" class="orbit-icon" alt="Docker">
-  <img src="{{ asset('assets/python-icon.png') }}" class="orbit-icon" alt="Python">
-  <img src="{{ asset('assets/react-icon.png') }}" class="orbit-icon" alt="React">
-  <img src="{{ asset('assets/css-icon.png') }}" class="orbit-icon" alt="CSS">
-  <img src="{{ asset('assets/nodejs-icon.png') }}" class="orbit-icon" alt="Node.js">
-  <img src="{{ asset('assets/postgresql-icon.png') }}" class="orbit-icon" alt="PostgreSQL">
     <h1 class="text-6xl md:text-7xl font-extrabold text-blue-900 tracking-tight mb-6">
       HIMAFORTIC 
     </h1>
@@ -39,6 +33,406 @@
       Bergabunglah dengan kami dalam membentuk masa depan transformasi digital.
     </p>
   </div>
+
+  <style>
+    /* Animasi pop-up smooth tanpa mantul */
+    @keyframes home-popup {
+      0% {
+        transform: scale(0.5) translate(0, 0);
+        opacity: 0;
+        filter: blur(12px);
+      }
+      20% {
+        transform: scale(1.1) translate(var(--tx), var(--ty));
+        opacity: 0.7;
+        filter: blur(6px);
+      }
+      40% {
+        transform: scale(1) translate(var(--tx), var(--ty));
+        opacity: 0.9;
+        filter: blur(3px);
+      }
+      60% {
+        transform: scale(1) translate(var(--tx), var(--ty));
+        opacity: 1;
+        filter: blur(1px);
+      }
+      80% {
+        transform: scale(1) translate(var(--tx), var(--ty));
+        opacity: 1;
+        filter: blur(0px);
+      }
+      100% {
+        transform: scale(1) translate(var(--tx), var(--ty));
+        opacity: 1;
+        filter: blur(0px);
+      }
+    }
+    
+    /* Animasi floating smooth dengan scaling */
+    @keyframes home-float {
+      0%, 100% {
+        transform: translate(var(--tx), var(--ty)) translateY(0px) scale(var(--scale));
+      }
+      50% {
+        transform: translate(var(--tx), var(--ty)) translateY(-8px) scale(calc(var(--scale) * 1.1));
+      }
+    }
+    
+    /* Animasi drift horizontal yang halus */
+    @keyframes home-drift {
+      0%, 100% {
+        transform: translate(var(--tx), var(--ty)) translateX(0px) scale(var(--scale));
+      }
+      50% {
+        transform: translate(var(--tx), var(--ty)) translateX(var(--drift-x, 5px)) scale(var(--scale));
+      }
+    }
+    
+    .home-popup-icon {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      animation: 
+        home-popup 1.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+        home-float 6s ease-in-out infinite,
+        home-drift 10s ease-in-out infinite;
+      animation-delay: var(--delay), calc(var(--delay) + 1.8s), calc(var(--delay) + 1.8s);
+      opacity: 0;
+      z-index: 5;
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.12),
+        0 4px 12px rgba(0, 0, 0, 0.08);
+      object-fit: contain;
+      transition: all 0.4s ease;
+      will-change: transform, opacity;
+      background: transparent;
+    }
+    
+    .home-popup-icon:hover {
+      transform: translate(var(--tx), var(--ty)) scale(calc(var(--scale) * 1.3)) !important;
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.18),
+        0 8px 20px rgba(0, 0, 0, 0.12);
+      z-index: 20;
+      animation-play-state: paused;
+    }
+    
+    @media (max-width: 768px) {
+      .home-popup-icon {
+        width: 48px;
+        height: 48px;
+        padding: 8px;
+        border-radius: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .home-popup-icon {
+        width: 42px;
+        height: 42px;
+        padding: 7px;
+      }
+    }
+
+    /* Area aman untuk teks */
+    .text-safe-zone {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Pastikan teks tetap di atas ikon */
+    .relative.z-10 {
+      z-index: 20 !important;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Home section icons
+      const homeIcons = [
+        { src: "{{ asset('assets/docker-icon.png') }}", alt: "Docker" },
+        { src: "{{ asset('assets/python-icon.png') }}", alt: "Python" },
+        { src: "{{ asset('assets/react-icon.png') }}", alt: "React" },
+        { src: "{{ asset('assets/css-icon.png') }}", alt: "CSS" },
+        { src: "{{ asset('assets/nodejs-icon.png') }}", alt: "Node.js" },
+        { src: "{{ asset('assets/postgresql-icon.png') }}", alt: "PostgreSQL" },
+      ];
+      
+      const homeContainer = document.getElementById('home-icons-container');
+      const containerRect = homeContainer.getBoundingClientRect();
+      const centerX = containerRect.width / 2;
+      const centerY = containerRect.height / 2;
+
+      // Array untuk menyimpan posisi ikon yang sudah ditempatkan
+      const placedIcons = [];
+      
+      // JARAK MINIMUM YANG LEBIH KETAT
+      const MIN_DISTANCE_BETWEEN_ICONS = 180; // Jarak minimum yang sangat ketat
+      const ICON_SIZE = 60; // Ukuran ikon dalam px
+      const SAFE_MARGIN = 20; // Margin tambahan untuk keamanan
+
+      // Area yang harus dihindari (posisi teks) - diperluas
+      const avoidZones = [
+        // Area HIMAFORTIC (atas) - diperluas
+        { x: centerX - 280, y: centerY - 200, width: 560, height: 140 },
+        // Area UNESA (tengah) - diperluas
+        { x: centerX - 200, y: centerY - 60, width: 400, height: 140 },
+        // Area garis pembatas - diperluas
+        { x: centerX - 180, y: centerY + 90, width: 360, height: 15 },
+        // Area deskripsi (bawah) - diperluas
+        { x: centerX - 380, y: centerY + 130, width: 760, height: 160 }
+      ];
+      
+      // Fungsi untuk mengecek apakah posisi bertabrakan dengan area teks
+      function isPositionSafe(x, y, size = ICON_SIZE) {
+        for (const zone of avoidZones) {
+          const iconLeft = x - size/2 - SAFE_MARGIN;
+          const iconRight = x + size/2 + SAFE_MARGIN;
+          const iconTop = y - size/2 - SAFE_MARGIN;
+          const iconBottom = y + size/2 + SAFE_MARGIN;
+          
+          const zoneLeft = zone.x;
+          const zoneRight = zone.x + zone.width;
+          const zoneTop = zone.y;
+          const zoneBottom = zone.y + zone.height;
+          
+          // Cek tabrakan dengan margin tambahan
+          if (iconRight > zoneLeft && iconLeft < zoneRight && 
+              iconBottom > zoneTop && iconTop < zoneBottom) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      // Fungsi untuk mengecek jarak dengan ikon lain - LEBIH KETAT
+      function isFarEnoughFromOtherIcons(x, y) {
+        for (const placedIcon of placedIcons) {
+          const distance = Math.sqrt(
+            Math.pow(x - placedIcon.x, 2) + Math.pow(y - placedIcon.y, 2)
+          );
+          
+          // Perhitungan jarak yang lebih ketat dengan mempertimbangkan ukuran ikon
+          const requiredDistance = MIN_DISTANCE_BETWEEN_ICONS + (ICON_SIZE / 2);
+          
+          if (distance < requiredDistance) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      // Fungsi untuk menghitung jarak dari pusat teks
+      function calculateDistanceFromText(x, y) {
+        const textCenterX = centerX;
+        const textCenterY = centerY;
+        return Math.sqrt(Math.pow(x - textCenterX, 2) + Math.pow(y - textCenterY, 2));
+      }
+      
+      // Fungsi untuk menghitung skala berdasarkan jarak
+      function calculateScale(distance) {
+        // Semakin dekat dengan teks, semakin kecil (0.1 - 1.8)
+        const minDistance = 50;
+        const maxDistance = 800;
+        const minScale = 0.1;
+        const maxScale = 1.8;
+        
+        if (distance <= minDistance) return minScale;
+        if (distance >= maxDistance) return maxScale;
+        
+        // Interpolasi linear
+        return minScale + (maxScale - minScale) * ((distance - minDistance) / (maxDistance - minDistance));
+      }
+      
+      // ALGORITMA BARU: Grid-based positioning dengan collision avoidance
+      function getStrictlySeparatedPosition(index, total) {
+        const maxAttempts = 200; // Lebih banyak percobaan untuk hasil yang lebih baik
+        
+        // Hitung grid yang optimal
+        const gridCols = Math.ceil(Math.sqrt(total * 1.5)); // Lebih banyak kolom untuk distribusi yang lebih baik
+        const gridRows = Math.ceil(total / gridCols);
+        
+        const cellWidth = containerRect.width / gridCols;
+        const cellHeight = containerRect.height / gridRows;
+        
+        let attempts = 0;
+        
+        while (attempts < maxAttempts) {
+          // Coba posisi berdasarkan grid terlebih dahulu
+          const gridX = index % gridCols;
+          const gridY = Math.floor(index / gridCols);
+          
+          // Posisi kandidat di tengah cell dengan variasi kecil
+          let candidateX = (gridX + 0.5) * cellWidth;
+          let candidateY = (gridY + 0.5) * cellHeight;
+          
+          // Tambahkan variasi acak untuk menghindari pattern yang kaku
+          if (attempts > 0) {
+            candidateX += (Math.random() - 0.5) * cellWidth * 0.6;
+            candidateY += (Math.random() - 0.5) * cellHeight * 0.6;
+          }
+          
+          // Pastikan posisi tidak terlalu dekat dengan border
+          const borderMargin = ICON_SIZE + 40;
+          if (candidateX < borderMargin || candidateX > containerRect.width - borderMargin ||
+              candidateY < borderMargin || candidateY > containerRect.height - borderMargin) {
+            attempts++;
+            continue;
+          }
+          
+          // Cek apakah posisi aman dari teks
+          if (!isPositionSafe(candidateX, candidateY)) {
+            attempts++;
+            continue;
+          }
+          
+          // Cek apakah posisi cukup jauh dari ikon lain - PENTING!
+          if (!isFarEnoughFromOtherIcons(candidateX, candidateY)) {
+            attempts++;
+            continue;
+          }
+          
+          // Nilai drift
+          const driftX = (Math.random() - 0.5) * 10;
+          
+          // Hitung skala berdasarkan jarak dari teks
+          const distanceFromText = calculateDistanceFromText(candidateX, candidateY);
+          const scale = calculateScale(distanceFromText);
+          
+          // Simpan posisi ikon yang berhasil ditempatkan
+          placedIcons.push({ x: candidateX, y: candidateY });
+          
+          return { 
+            tx: candidateX - centerX, 
+            ty: candidateY - centerY,
+            driftX: `${driftX}px`,
+            scale: scale
+          };
+        }
+        
+        // FALLBACK: Algorithm dengan force-directed approach
+        console.log(`Using fallback algorithm for icon ${index}`);
+        return getForceDirectedPosition(index, total);
+      }
+      
+      // ALGORITMA FALLBACK: Force-directed placement
+      function getForceDirectedPosition(index, total) {
+        const maxFallbackAttempts = 100;
+        
+        for (let attempt = 0; attempt < maxFallbackAttempts; attempt++) {
+          // Coba posisi di area yang kurang padat
+          const candidateX = Math.random() * (containerRect.width - 120) + 60;
+          const candidateY = Math.random() * (containerRect.height - 120) + 60;
+          
+          // Cek semua constraint
+          const borderMargin = ICON_SIZE + 30;
+          if (candidateX < borderMargin || candidateX > containerRect.width - borderMargin ||
+              candidateY < borderMargin || candidateY > containerRect.height - borderMargin) {
+            continue;
+          }
+          
+          if (!isPositionSafe(candidateX, candidateY)) {
+            continue;
+          }
+          
+          if (!isFarEnoughFromOtherIcons(candidateX, candidateY)) {
+            continue;
+          }
+          
+          const driftX = (Math.random() - 0.5) * 8;
+          const distanceFromText = calculateDistanceFromText(candidateX, candidateY);
+          const scale = calculateScale(distanceFromText);
+          
+          placedIcons.push({ x: candidateX, y: candidateY });
+          
+          return { 
+            tx: candidateX - centerX, 
+            ty: candidateY - centerY,
+            driftX: `${driftX}px`,
+            scale: scale
+          };
+        }
+        
+        // ULTIMATE FALLBACK: Posisi di sudut dengan jarak maksimal
+        const corners = [
+          { x: 80, y: 80 },
+          { x: containerRect.width - 80, y: 80 },
+          { x: 80, y: containerRect.height - 80 },
+          { x: containerRect.width - 80, y: containerRect.height - 80 }
+        ];
+        
+        const corner = corners[index % corners.length];
+        const distanceFromText = calculateDistanceFromText(corner.x, corner.y);
+        const scale = calculateScale(distanceFromText);
+        
+        placedIcons.push({ x: corner.x, y: corner.y });
+        
+        return {
+          tx: corner.x - centerX,
+          ty: corner.y - centerY,
+          driftX: '0px',
+          scale: scale
+        };
+      }
+      
+      // Acak urutan ikon
+      function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+      }
+      
+      // Tambahkan ikon dengan animasi smooth tanpa mantul
+      const shuffledIcons = shuffleArray(homeIcons);
+      shuffledIcons.forEach((icon, index) => {
+        setTimeout(() => {
+          const img = document.createElement('img');
+          img.src = icon.src;
+          img.alt = icon.alt;
+          img.className = 'home-popup-icon';
+          
+          const position = getStrictlySeparatedPosition(index, shuffledIcons.length);
+          img.style.setProperty('--tx', `${position.tx}px`);
+          img.style.setProperty('--ty', `${position.ty}px`);
+          img.style.setProperty('--drift-x', position.driftX);
+          img.style.setProperty('--scale', position.scale);
+          img.style.setProperty('--delay', `${index * 0.25}s`);
+          
+          // Posisikan di tengah container (pusat pop-up)
+          img.style.left = `${centerX - 30}px`;
+          img.style.top = `${centerY - 30}px`;
+          
+          homeContainer.appendChild(img);
+          
+        }, index * 250);
+      });
+      
+      // Tambahkan efek hover pada teks
+      const heroTexts = document.querySelectorAll('h1');
+      heroTexts.forEach(text => {
+        text.addEventListener('mouseenter', function() {
+          this.style.transform = 'scale(1.02)';
+          this.style.transition = 'transform 0.3s ease';
+        });
+        
+        text.addEventListener('mouseleave', function() {
+          this.style.transform = 'scale(1)';
+        });
+      });
+
+      // Tambahkan class safe zone ke elemen teks
+      const contentDiv = document.querySelector('.relative.z-10');
+      if (contentDiv) {
+        contentDiv.classList.add('text-safe-zone');
+      }
+    });
+  </script>
 </section>
 
 <section id="about" class="relative overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50/30 py-24">
@@ -62,59 +456,57 @@
     <div class="relative flex justify-center items-center scroll-reveal">
       <div class="relative w-80 h-80 md:w-[500px] md:h-[500px] flex items-center justify-center">
         <!-- Explosion container -->
-        <div id="explosionContainer" class="absolute inset-0 z-30"></div>
+        <div id="about-explosionContainer" class="absolute inset-0 z-30"></div>
         <!-- Glow effect behind logo -->
         <div class="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse-slow"></div>
         <!-- Main orbit container -->
         <div class="absolute inset-0">
           <!-- Orbit rings dengan animasi masuk -->
-          <div class="orbit-ring absolute inset-0 border-2 border-blue-200/30 rounded-full"></div>
-          <div class="orbit-ring absolute inset-8 border border-cyan-200/20 rounded-full"></div>
-          <div class="orbit-ring absolute inset-16 border border-indigo-200/10 rounded-full"></div>
+          <div class="about-orbit-ring absolute inset-0 border-2 border-blue-200/30 rounded-full"></div>
+          <div class="about-orbit-ring absolute inset-8 border border-cyan-200/20 rounded-full"></div>
+          <div class="about-orbit-ring absolute inset-16 border border-indigo-200/10 rounded-full"></div>
           <!-- Orbiting icons dengan efek ledakan -->
-          <div class="orbit-icon-container" style="--orbit-radius: 180px; --orbit-speed: 40s; --explosion-delay: 0s;">
-            <img src="{{ asset('assets/python-icon.png') }}" class="orbit-icon" alt="Python">
+          <div class="about-orbit-icon-container" style="--about-orbit-radius: 180px; --about-orbit-speed: 40s; --about-explosion-delay: 0s;">
+            <img src="{{ asset('assets/python-icon.png') }}" class="about-orbit-icon" alt="Python">
           </div>
-          <div class="orbit-icon-container" style="--orbit-radius: 180px; --orbit-speed: 35s; --start-angle: 60deg; --explosion-delay: 0.2s;">
-            <img src="{{ asset('assets/react-icon.png') }}" class="orbit-icon" alt="React">
+          <div class="about-orbit-icon-container" style="--about-orbit-radius: 180px; --about-orbit-speed: 35s; --about-start-angle: 60deg; --about-explosion-delay: 0.2s;">
+            <img src="{{ asset('assets/react-icon.png') }}" class="about-orbit-icon" alt="React">
           </div>
-          <div class="orbit-icon-container" style="--orbit-radius: 180px; --orbit-speed: 45s; --start-angle: 120deg; --explosion-delay: 0.4s;">
-            <img src="{{ asset('assets/docker-icon.png') }}" class="orbit-icon" alt="Docker">
+          <div class="about-orbit-icon-container" style="--about-orbit-radius: 180px; --about-orbit-speed: 45s; --about-start-angle: 120deg; --about-explosion-delay: 0.4s;">
+            <img src="{{ asset('assets/docker-icon.png') }}" class="about-orbit-icon" alt="Docker">
           </div>
-          <div class="orbit-icon-container" style="--orbit-radius: 180px; --orbit-speed: 38s; --start-angle: 180deg; --explosion-delay: 0.6s;">
-            <img src="{{ asset('assets/css-icon.png') }}" class="orbit-icon" alt="CSS">
+          <div class="about-orbit-icon-container" style="--about-orbit-radius: 180px; --about-orbit-speed: 38s; --about-start-angle: 180deg; --about-explosion-delay: 0.6s;">
+            <img src="{{ asset('assets/css-icon.png') }}" class="about-orbit-icon" alt="CSS">
           </div>
-          <div class="orbit-icon-container" style="--orbit-radius: 180px; --orbit-speed: 42s; --start-angle: 240deg; --explosion-delay: 0.8s;">
-            <img src="{{ asset('assets/nodejs-icon.png') }}" class="orbit-icon" alt="Node.js">
+          <div class="about-orbit-icon-container" style="--about-orbit-radius: 180px; --about-orbit-speed: 42s; --about-start-angle: 240deg; --about-explosion-delay: 0.8s;">
+            <img src="{{ asset('assets/nodejs-icon.png') }}" class="about-orbit-icon" alt="Node.js">
           </div>
-          <div class="orbit-icon-container" style="--orbit-radius: 180px; --orbit-speed: 37s; --start-angle: 300deg; --explosion-delay: 1s;">
-            <img src="{{ asset('assets/postgresql-icon.png') }}" class="orbit-icon" alt="PostgreSQL">
+          <div class="about-orbit-icon-container" style="--about-orbit-radius: 180px; --about-orbit-speed: 37s; --about-start-angle: 300deg; --about-explosion-delay: 1s;">
+            <img src="{{ asset('assets/postgresql-icon.png') }}" class="about-orbit-icon" alt="PostgreSQL">
           </div>
           
           <!-- Inner orbit icons -->
-          <div class="orbit-icon-container" style="--orbit-radius: 120px; --orbit-speed: 25s; --start-angle: 30deg; --explosion-delay: 1.2s;">
-            <img src="{{ asset('assets/csharp-icon.png') }}" class="orbit-icon orbit-icon-small" alt="C#">
+          <div class="about-orbit-icon-container" style="--about-orbit-radius: 120px; --about-orbit-speed: 25s; --about-start-angle: 30deg; --about-explosion-delay: 1.2s;">
+            <img src="{{ asset('assets/csharp-icon.png') }}" class="about-orbit-icon about-orbit-icon-small" alt="C#">
           </div>
         </div>
 
         <!-- Logo HIMAFORTIC di tengah dengan efek glow dan trigger ledakan -->
-        <div class="relative z-20 group cursor-pointer" id="logoTrigger">
-        
+        <div class="relative z-20 group cursor-pointer" id="about-logoTrigger">
           <img src="{{ asset('assets/logo-himafortic.png') }}" 
                alt="HIMAFORTIC Logo" 
                class="relative w-48 h-48 md:w-60 md:h-60 object-contain z-10 drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500">
         </div>
         <!-- Floating particles background -->
         <div class="absolute inset-0">
-          <div class="particle" style="--delay: 0s; --duration: 8s; --size: 4px; --color: rgb(59 130 246); top: 20%; left: 30%;"></div>
-          <div class="particle" style="--delay: 1s; --duration: 10s; --size: 3px; --color: rgb(6 182 212); top: 60%; left: 20%;"></div>
-          <div class="particle" style="--delay: 2s; --duration: 12s; --size: 5px; --color: rgb(139 92 246); top: 80%; left: 70%;"></div>
-          <div class="particle" style="--delay: 3s; --duration: 9s; --size: 4px; --color: rgb(59 130 246); top: 40%; left: 80%;"></div>
-          <div class="particle" style="--delay: 4s; --duration: 11s; --size: 3px; --color: rgb(6 182 212); top: 10%; left: 60%;"></div>
+          <div class="about-particle" style="--about-delay: 0s; --about-duration: 8s; --about-size: 4px; --about-color: rgb(59 130 246); top: 20%; left: 30%;"></div>
+          <div class="about-particle" style="--about-delay: 1s; --about-duration: 10s; --about-size: 3px; --about-color: rgb(6 182 212); top: 60%; left: 20%;"></div>
+          <div class="about-particle" style="--about-delay: 2s; --about-duration: 12s; --about-size: 5px; --about-color: rgb(139 92 246); top: 80%; left: 70%;"></div>
+          <div class="about-particle" style="--about-delay: 3s; --about-duration: 9s; --about-size: 4px; --about-color: rgb(59 130 246); top: 40%; left: 80%;"></div>
+          <div class="about-particle" style="--about-delay: 4s; --about-duration: 11s; --about-size: 3px; --about-color: rgb(6 182 212); top: 10%; left: 60%;"></div>
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -415,29 +807,30 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
-<!-- Enhanced Animations and Styles -->
+
+<!-- Enhanced Animations and Styles untuk About Section -->
 <style>
 /* Animation delays */
 .animation-delay-200 { animation-delay: 0.2s; }
 .animation-delay-400 { animation-delay: 0.4s; }
 
 /* Slow pulse animation */
-@keyframes pulse-slow {
+@keyframes about-pulse-slow {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 0.6; }
 }
 .animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
+  animation: about-pulse-slow 4s ease-in-out infinite;
 }
 
-/* Orbit ring entrance animation */
-.orbit-ring {
+/* Orbit ring entrance animation untuk about */
+.about-orbit-ring {
   opacity: 0;
   transform: scale(0.8);
-  animation: ring-entrance 2s ease-out forwards;
+  animation: about-ring-entrance 2s ease-out forwards;
 }
 
-@keyframes ring-entrance {
+@keyframes about-ring-entrance {
   0% {
     opacity: 0;
     transform: scale(0.8);
@@ -448,54 +841,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 }
 
-.orbit-ring:nth-child(1) { animation-delay: 0.5s; }
-.orbit-ring:nth-child(2) { animation-delay: 0.7s; }
-.orbit-ring:nth-child(3) { animation-delay: 0.9s; }
+.about-orbit-ring:nth-child(1) { animation-delay: 0.5s; }
+.about-orbit-ring:nth-child(2) { animation-delay: 0.7s; }
+.about-orbit-ring:nth-child(3) { animation-delay: 0.9s; }
 
-/* Realistic orbital movement with explosion effect */
-.orbit-icon-container {
+/* Realistic orbital movement dengan explosion effect untuk about */
+.about-orbit-icon-container {
   position: absolute;
   top: 50%;
   left: 50%;
   opacity: 0;
   animation: 
-    orbit-entrance 0.8s ease-out forwards,
-    orbit var(--orbit-speed, 40s) linear infinite;
-  animation-delay: var(--explosion-delay, 0s), calc(var(--explosion-delay, 0s) + 0.8s);
-  transform: rotate(var(--start-angle, 0deg)) translateX(var(--orbit-radius, 180px)) rotate(calc(-1 * var(--start-angle, 0deg)));
+    about-orbit-entrance 0.8s ease-out forwards,
+    about-orbit var(--about-orbit-speed, 40s) linear infinite;
+  animation-delay: var(--about-explosion-delay, 0s), calc(var(--about-explosion-delay, 0s) + 0.8s);
+  transform: rotate(var(--about-start-angle, 0deg)) translateX(var(--about-orbit-radius, 180px)) rotate(calc(-1 * var(--about-start-angle, 0deg)));
 }
 
-@keyframes orbit-entrance {
+@keyframes about-orbit-entrance {
   0% {
     opacity: 0;
-    transform: scale(0) rotate(var(--start-angle, 0deg)) translateX(0) rotate(calc(-1 * var(--start-angle, 0deg)));
+    transform: scale(0) rotate(var(--about-start-angle, 0deg)) translateX(0) rotate(calc(-1 * var(--about-start-angle, 0deg)));
   }
   70% {
     opacity: 1;
-    transform: scale(1.2) rotate(var(--start-angle, 0deg)) translateX(var(--orbit-radius, 180px)) rotate(calc(-1 * var(--start-angle, 0deg)));
+    transform: scale(1.2) rotate(var(--about-start-angle, 0deg)) translateX(var(--about-orbit-radius, 180px)) rotate(calc(-1 * var(--about-start-angle, 0deg)));
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(var(--start-angle, 0deg)) translateX(var(--orbit-radius, 180px)) rotate(calc(-1 * var(--start-angle, 0deg)));
+    transform: scale(1) rotate(var(--about-start-angle, 0deg)) translateX(var(--about-orbit-radius, 180px)) rotate(calc(-1 * var(--about-start-angle, 0deg)));
   }
 }
 
-@keyframes orbit {
+@keyframes about-orbit {
   0% {
-    transform: rotate(var(--start-angle, 0deg)) translateX(var(--orbit-radius, 180px)) rotate(calc(-1 * var(--start-angle, 0deg)));
+    transform: rotate(var(--about-start-angle, 0deg)) translateX(var(--about-orbit-radius, 180px)) rotate(calc(-1 * var(--about-start-angle, 0deg)));
   }
   100% {
-    transform: rotate(calc(var(--start-angle, 0deg) + 360deg)) translateX(var(--orbit-radius, 180px)) rotate(calc(-1 * var(--start-angle, 0deg) - 360deg));
+    transform: rotate(calc(var(--about-start-angle, 0deg) + 360deg)) translateX(var(--about-orbit-radius, 180px)) rotate(calc(-1 * var(--about-start-angle, 0deg) - 360deg));
   }
 }
 
-/* Enhanced icon styles with explosion effects */
-.orbit-icon {
+/* Enhanced icon styles dengan explosion effects untuk about */
+.about-orbit-icon {
   width: 50px;
   height: 50px;
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-  animation: float-3d 6s ease-in-out infinite;
+  animation: about-float-3d 6s ease-in-out infinite;
   transition: all 0.3s ease;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.9);
@@ -507,53 +900,53 @@ document.addEventListener("DOMContentLoaded", () => {
   z-index: 10;
 }
 
-.orbit-icon-small {
+.about-orbit-icon-small {
   width: 40px;
   height: 40px;
   padding: 6px;
 }
 
-.orbit-icon:hover {
+.about-orbit-icon:hover {
   transform: scale(1.3) rotate(15deg);
   filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4));
   background: rgba(255, 255, 255, 1);
   z-index: 20;
 }
 
-/* Explosion particle styles */
-.explosion-particle {
+/* Explosion particle styles untuk about */
+.about-explosion-particle {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
   z-index: 25;
-  animation: explosion-animation 1.5s ease-out forwards;
+  animation: about-explosion-animation 1.5s ease-out forwards;
 }
 
-@keyframes explosion-animation {
+@keyframes about-explosion-animation {
   0% {
     opacity: 1;
     transform: translate(0, 0) scale(1);
   }
   20% {
     opacity: 0.8;
-    transform: translate(var(--tx-1, 0px), var(--ty-1, 0px)) scale(1.2);
+    transform: translate(var(--about-tx-1, 0px), var(--about-ty-1, 0px)) scale(1.2);
   }
   50% {
     opacity: 0.6;
-    transform: translate(var(--tx-2, 0px), var(--ty-2, 0px)) scale(0.8);
+    transform: translate(var(--about-tx-2, 0px), var(--about-ty-2, 0px)) scale(0.8);
   }
   80% {
     opacity: 0.3;
-    transform: translate(var(--tx-3, 0px), var(--ty-3, 0px)) scale(0.6);
+    transform: translate(var(--about-tx-3, 0px), var(--about-ty-3, 0px)) scale(0.6);
   }
   100% {
     opacity: 0;
-    transform: translate(var(--tx-4, 0px), var(--ty-4, 0px)) scale(0);
+    transform: translate(var(--about-tx-4, 0px), var(--about-ty-4, 0px)) scale(0);
   }
 }
 
-/* 3D floating effect */
-@keyframes float-3d {
+/* 3D floating effect untuk about */
+@keyframes about-float-3d {
   0%, 100% { 
     transform: 
       translateY(0px) 
@@ -584,19 +977,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 }
 
-/* Floating particles */
-.particle {
+/* Floating particles untuk about */
+.about-particle {
   position: absolute;
-  background: var(--color);
+  background: var(--about-color);
   border-radius: 50%;
-  width: var(--size);
-  height: var(--size);
-  animation: particle-float var(--duration) ease-in-out infinite;
-  animation-delay: var(--delay);
+  width: var(--about-size);
+  height: var(--about-size);
+  animation: about-particle-float var(--about-duration) ease-in-out infinite;
+  animation-delay: var(--about-delay);
   opacity: 0.6;
 }
 
-@keyframes particle-float {
+@keyframes about-particle-float {
   0%, 100% {
     transform: translate(0, 0) scale(1);
     opacity: 0.3;
@@ -615,87 +1008,53 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 }
 
-/* Scroll reveal animation */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease;
-}
-
-.scroll-reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Logo trigger animation */
-#logoTrigger {
+/* Logo trigger animation untuk about */
+#about-logoTrigger {
   transition: all 0.3s ease;
 }
 
-#logoTrigger:active {
+#about-logoTrigger:active {
   transform: scale(0.95);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments untuk about */
 @media (max-width: 768px) {
-  .orbit-icon {
+  .about-orbit-icon {
     width: 40px;
     height: 40px;
     padding: 6px;
   }
   
-  .orbit-icon-small {
+  .about-orbit-icon-small {
     width: 32px;
     height: 32px;
     padding: 4px;
   }
   
-  .orbit-icon-container[style*="--orbit-radius: 180px"] {
-    --orbit-radius: 120px;
+  .about-orbit-icon-container[style*="--about-orbit-radius: 180px"] {
+    --about-orbit-radius: 120px;
   }
   
-  .orbit-icon-container[style*="--orbit-radius: 120px"] {
-    --orbit-radius: 80px;
+  .about-orbit-icon-container[style*="--about-orbit-radius: 120px"] {
+    --about-orbit-radius: 80px;
   }
 }
 </style>
 
 <script>
-// Scroll reveal functionality
+// Explosion effect functionality untuk about section
 document.addEventListener('DOMContentLoaded', function() {
-  const scrollReveals = document.querySelectorAll('.scroll-reveal');
+  const aboutLogoTrigger = document.getElementById('about-logoTrigger');
+  const aboutExplosionContainer = document.getElementById('about-explosionContainer');
+  const aboutOrbitIcons = document.querySelectorAll('.about-orbit-icon');
   
-  const revealOnScroll = () => {
-    scrollReveals.forEach(element => {
-      const elementTop = element.getBoundingClientRect().top;
-      const windowHeight = window.innerHeight;
-      
-      if (elementTop < windowHeight - 100) {
-        element.classList.add('revealed');
-      }
-    });
-  };
-  
-  // Initial check
-  revealOnScroll();
-  
-  // Check on scroll
-  window.addEventListener('scroll', revealOnScroll);
-});
-
-// Explosion effect functionality
-document.addEventListener('DOMContentLoaded', function() {
-  const logoTrigger = document.getElementById('logoTrigger');
-  const explosionContainer = document.getElementById('explosionContainer');
-  const orbitIcons = document.querySelectorAll('.orbit-icon');
-  
-  // Create explosion effect
-  function createExplosion(x, y, color = '#3b82f6') {
+  // Create explosion effect untuk about
+  function createAboutExplosion(x, y, color = '#3b82f6') {
     const particleCount = 30;
     
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('div');
-      particle.className = 'explosion-particle';
+      particle.className = 'about-explosion-particle';
       
       // Random properties for each particle
       const angle = Math.random() * Math.PI * 2;
@@ -715,14 +1074,14 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Set particle styles
       particle.style.cssText = `
-        --tx-1: ${tx1}px;
-        --ty-1: ${ty1}px;
-        --tx-2: ${tx2}px;
-        --ty-2: ${ty2}px;
-        --tx-3: ${tx3}px;
-        --ty-3: ${ty3}px;
-        --tx-4: ${tx4}px;
-        --ty-4: ${ty4}px;
+        --about-tx-1: ${tx1}px;
+        --about-ty-1: ${ty1}px;
+        --about-tx-2: ${tx2}px;
+        --about-ty-2: ${ty2}px;
+        --about-tx-3: ${tx3}px;
+        --about-ty-3: ${ty3}px;
+        --about-tx-4: ${tx4}px;
+        --about-ty-4: ${ty4}px;
         left: ${x}px;
         top: ${y}px;
         width: ${size}px;
@@ -731,7 +1090,7 @@ document.addEventListener('DOMContentLoaded', function() {
         animation-duration: ${duration}s;
       `;
       
-      explosionContainer.appendChild(particle);
+      aboutExplosionContainer.appendChild(particle);
       
       // Remove particle after animation
       setTimeout(() => {
@@ -742,61 +1101,92 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Trigger explosion on logo click
-  logoTrigger.addEventListener('click', function(e) {
-    const rect = logoTrigger.getBoundingClientRect();
-    const x = rect.width / 2;
-    const y = rect.height / 2;
+  // Trigger explosion on about logo click
+  aboutLogoTrigger.addEventListener('click', function(e) {
+    const rect = aboutLogoTrigger.getBoundingClientRect();
+    const containerRect = aboutExplosionContainer.getBoundingClientRect();
+    const x = rect.left + rect.width / 2 - containerRect.left;
+    const y = rect.top + rect.height / 2 - containerRect.top;
     
     // Create multiple explosions with different colors
-    createExplosion(x, y, '#3b82f6'); // Blue
-    setTimeout(() => createExplosion(x, y, '#06b6d4'), 100); // Cyan
-    setTimeout(() => createExplosion(x, y, '#8b5cf6'), 200); // Purple
+    createAboutExplosion(x, y, '#3b82f6'); // Blue
+    setTimeout(() => createAboutExplosion(x, y, '#06b6d4'), 100); // Cyan
+    setTimeout(() => createAboutExplosion(x, y, '#8b5cf6'), 200); // Purple
     
     // Add shake effect to logo
-    logoTrigger.style.animation = 'shake 0.5s ease-in-out';
+    aboutLogoTrigger.style.animation = 'about-shake 0.5s ease-in-out';
     setTimeout(() => {
-      logoTrigger.style.animation = '';
+      aboutLogoTrigger.style.animation = '';
     }, 500);
   });
   
-  // Add interactive hover effects for orbit icons
-  orbitIcons.forEach(icon => {
+  // Add interactive hover effects for about orbit icons
+  aboutOrbitIcons.forEach(icon => {
     icon.addEventListener('mouseenter', function() {
       this.style.animationPlayState = 'paused';
       // Create small explosion on hover
       const rect = this.getBoundingClientRect();
-      const containerRect = explosionContainer.getBoundingClientRect();
+      const containerRect = aboutExplosionContainer.getBoundingClientRect();
       const x = rect.left + rect.width / 2 - containerRect.left;
       const y = rect.top + rect.height / 2 - containerRect.top;
-      createExplosion(x, y, '#fbbf24'); // Yellow explosion
+      createAboutExplosion(x, y, '#fbbf24'); // Yellow explosion
     });
     
     icon.addEventListener('mouseleave', function() {
       this.style.animationPlayState = 'running';
     });
     
-    // Click explosion for icons
+    // Click explosion for about icons
     icon.addEventListener('click', function(e) {
       e.stopPropagation();
       const rect = this.getBoundingClientRect();
-      const containerRect = explosionContainer.getBoundingClientRect();
+      const containerRect = aboutExplosionContainer.getBoundingClientRect();
       const x = rect.left + rect.width / 2 - containerRect.left;
       const y = rect.top + rect.height / 2 - containerRect.top;
-      createExplosion(x, y, '#ef4444'); // Red explosion
+      createAboutExplosion(x, y, '#ef4444'); // Red explosion
     });
   });
 });
 
-// Shake animation for logo
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes shake {
+// Shake animation untuk about logo
+const aboutStyle = document.createElement('style');
+aboutStyle.textContent = `
+  @keyframes about-shake {
     0%, 100% { transform: translateX(0) scale(1.05); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-4px) scale(1.05); }
     20%, 40%, 60%, 80% { transform: translateX(4px) scale(1.05); }
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(aboutStyle);
+
+// Scroll reveal functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollReveals = document.querySelectorAll('.scroll-reveal');
+  
+  const revealOnScroll = () => {
+    scrollReveals.forEach(element => {
+      const elementTop = element.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+      
+      if (elementTop < windowHeight - 100) {
+        element.classList.add('is-visible');
+      }
+    });
+  };
+  
+  // Initial check
+  revealOnScroll();
+  
+  // Check on scroll
+  window.addEventListener('scroll', revealOnScroll);
+});
+</script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 800, 
+    once: true,    
+  });
 </script>
 @endsection

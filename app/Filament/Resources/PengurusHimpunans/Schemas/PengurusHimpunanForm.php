@@ -31,15 +31,13 @@ class PengurusHimpunanForm
                     'Ketua Departemen' => 'Ketua Departemen',
                 ])
                 ->required(),
-
-            // Dropdown departemen hanya muncul kalau jabatan = Ketua Departemen
+                
             Select::make('departemen_id')
                 ->label('Departemen (jika Ketua Departemen)')
-                ->options(Departemen::pluck('nama', 'id')) // ambil data departemen
+                ->options(Departemen::pluck('nama', 'id')) 
                 ->searchable()
                 ->visible(fn ($get) => $get('jabatan') === 'Ketua Departemen'),
 
-            // Upload foto pengurus
             FileUpload::make('foto')
                 ->label('Foto Pengurus')
                 ->image()

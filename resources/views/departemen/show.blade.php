@@ -38,11 +38,15 @@
 
                     {{-- Hero Image --}}
                     @if ($departemen->foto)
-                        <div class="relative h-64 md:h-80 lg:h-96 overflow-hidden">
+                        <div class="relative bg-blue-50 flex items-center justify-center h-auto md:h-[400px] lg:h-[500px] overflow-hidden">
                             <img src="{{ asset('storage/' . $departemen->foto) }}" 
-                                 alt="{{ $departemen->nama }}" 
-                                 class="w-full h-full object-cover transform hover:scale-105 transition duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent"></div>
+                                alt="{{ $departemen->nama }}" 
+                                class="w-full h-auto object-contain transition duration-700 transform hover:scale-105">
+                            
+                            <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none"></div>
+
+                            <!-- Label -->
                             <div class="absolute bottom-6 left-6">
                                 <span class="text-white text-sm font-semibold bg-blue-600/90 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
                                     Departemen {{ $departemen->nama }}
@@ -50,6 +54,7 @@
                             </div>
                         </div>
                     @endif
+
 
                     <div class="p-6 md:p-8 lg:p-12">
                         {{-- Department Info --}}
@@ -367,7 +372,7 @@
                     <div class="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl">
                         <h4 class="font-bold text-lg mb-4 flex items-center gap-2">
                             <i class="fas fa-chart-bar"></i>
-                            Statistik Cepat
+                            Statistik
                         </h4>
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
@@ -383,21 +388,6 @@
                                 <span class="font-bold text-green-300 text-sm">Aktif</span>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Contact Info -->
-                    <div class="bg-white rounded-2xl shadow-xl border border-blue-100 p-6">
-                        <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-info-circle text-blue-500"></i>
-                            Informasi
-                        </h4>
-                        <p class="text-slate-600 text-sm mb-4">
-                            Untuk informasi lebih lanjut tentang departemen ini, hubungi kami melalui kontak yang tersedia.
-                        </p>
-                        <button class="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold py-2 px-4 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm">
-                            <i class="fas fa-envelope"></i>
-                            Hubungi Departemen
-                        </button>
                     </div>
                 </div>
             </div>
