@@ -187,14 +187,24 @@
                             <i class="fas fa-link text-blue-500"></i>
                             Quick Links
                         </h4>
+
                         <div class="space-y-2">
-                            @foreach(['Tentang Kami', 'Program Kerja', 'Galeri', 'Kontak'] as $link)
-                            <a href="#" class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 text-slate-700 hover:text-blue-700 transition-all duration-300 group">
-                                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-500 transition-colors">
-                                    <i class="fas fa-arrow-right text-blue-500 group-hover:text-white text-xs transition-colors"></i>
-                                </div>
-                                <span class="font-medium">{{ $link }}</span>
-                            </a>
+                            @php
+                                $quickLinks = [
+                                    ['label' => 'Tentang Kami', 'url' => url('/departemen')],
+                                    ['label' => 'History', 'url' => url('/history')],
+                                    ['label' => 'Merch', 'url' => url('/merchandise')],
+                                ];
+                            @endphp
+
+                            @foreach($quickLinks as $link)
+                                <a href="{{ $link['url'] }}" 
+                                class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-50 text-slate-700 hover:text-blue-700 transition-all duration-300 group">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-500 transition-colors">
+                                        <i class="fas fa-arrow-right text-blue-500 group-hover:text-white text-xs transition-colors"></i>
+                                    </div>
+                                    <span class="font-medium">{{ $link['label'] }}</span>
+                                </a>
                             @endforeach
                         </div>
                     </div>

@@ -35,7 +35,7 @@
   </div>
 
   <style>
-    /* Animasi pop-up smooth tanpa mantul */
+
     @keyframes home-popup {
       0% {
         transform: scale(0.5) translate(0, 0);
@@ -79,7 +79,7 @@
       }
     }
     
-    /* Animasi drift horizontal yang halus */
+    /* Animasi drift horizontal halus */
     @keyframes home-drift {
       0%, 100% {
         transform: translate(var(--tx), var(--ty)) translateX(0px) scale(var(--scale));
@@ -137,13 +137,12 @@
       }
     }
 
-    /* Area aman untuk teks */
+
     .text-safe-zone {
       position: relative;
       z-index: 10;
     }
 
-    /* Pastikan teks tetap di atas ikon */
     .relative.z-10 {
       z-index: 20 !important;
     }
@@ -170,13 +169,13 @@
       const placedIcons = [];
       
       // JARAK MINIMUM YANG LEBIH KETAT
-      const MIN_DISTANCE_BETWEEN_ICONS = 180; // Jarak minimum yang sangat ketat
-      const ICON_SIZE = 60; // Ukuran ikon dalam px
-      const SAFE_MARGIN = 20; // Margin tambahan untuk keamanan
+      const MIN_DISTANCE_BETWEEN_ICONS = 180; 
+      const ICON_SIZE = 60; 
+      const SAFE_MARGIN = 20; 
 
       // Area yang harus dihindari (posisi teks) - diperluas
       const avoidZones = [
-        // Area HIMAFORTIC (atas) - diperluas
+
         { x: centerX - 280, y: centerY - 200, width: 560, height: 140 },
         // Area UNESA (tengah) - diperluas
         { x: centerX - 200, y: centerY - 60, width: 400, height: 140 },
@@ -249,10 +248,10 @@
       
       // ALGORITMA BARU: Grid-based positioning dengan collision avoidance
       function getStrictlySeparatedPosition(index, total) {
-        const maxAttempts = 200; // Lebih banyak percobaan untuk hasil yang lebih baik
+        const maxAttempts = 200; 
         
-        // Hitung grid yang optimal
-        const gridCols = Math.ceil(Math.sqrt(total * 1.5)); // Lebih banyak kolom untuk distribusi yang lebih baik
+
+        const gridCols = Math.ceil(Math.sqrt(total * 1.5)); 
         const gridRows = Math.ceil(total / gridCols);
         
         const cellWidth = containerRect.width / gridCols;
@@ -283,26 +282,24 @@
             continue;
           }
           
-          // Cek apakah posisi aman dari teks
+
           if (!isPositionSafe(candidateX, candidateY)) {
             attempts++;
             continue;
           }
           
-          // Cek apakah posisi cukup jauh dari ikon lain - PENTING!
           if (!isFarEnoughFromOtherIcons(candidateX, candidateY)) {
             attempts++;
             continue;
           }
           
-          // Nilai drift
           const driftX = (Math.random() - 0.5) * 10;
           
-          // Hitung skala berdasarkan jarak dari teks
+
           const distanceFromText = calculateDistanceFromText(candidateX, candidateY);
           const scale = calculateScale(distanceFromText);
           
-          // Simpan posisi ikon yang berhasil ditempatkan
+
           placedIcons.push({ x: candidateX, y: candidateY });
           
           return { 
@@ -388,7 +385,7 @@
         return shuffled;
       }
       
-      // Tambahkan ikon dengan animasi smooth tanpa mantul
+
       const shuffledIcons = shuffleArray(homeIcons);
       shuffledIcons.forEach((icon, index) => {
         setTimeout(() => {
@@ -404,7 +401,7 @@
           img.style.setProperty('--scale', position.scale);
           img.style.setProperty('--delay', `${index * 0.25}s`);
           
-          // Posisikan di tengah container (pusat pop-up)
+          // Pusat
           img.style.left = `${centerX - 30}px`;
           img.style.top = `${centerY - 30}px`;
           
@@ -413,7 +410,7 @@
         }, index * 250);
       });
       
-      // Tambahkan efek hover pada teks
+      // Hover
       const heroTexts = document.querySelectorAll('h1');
       heroTexts.forEach(text => {
         text.addEventListener('mouseenter', function() {
@@ -426,7 +423,7 @@
         });
       });
 
-      // Tambahkan class safe zone ke elemen teks
+      // safe zone teks
       const contentDiv = document.querySelector('.relative.z-10');
       if (contentDiv) {
         contentDiv.classList.add('text-safe-zone');
@@ -585,10 +582,11 @@
                     </div>
                 </div>
 
-                    <button class="mt-10 group inline-flex items-center gap-2 border-2 border-blue-600 px-6 py-3 rounded-lg font-medium text-blue-600 transition duration-300 hover:bg-blue-600 hover:text-white transform hover:-translate-y-1">
-                        Learn More About Us
-                        <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-1"></i>
-                    </button>
+                <a href="{{ url('/departemen') }}" 
+                  class="mt-10 group inline-flex items-center gap-2 border-2 border-blue-600 px-6 py-3 rounded-lg font-medium text-blue-600 transition duration-300 hover:bg-blue-600 hover:text-white transform hover:-translate-y-1">
+                    Learn More About Us
+                    <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-1"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -651,7 +649,7 @@
         {{-- === DEPARTEMEN === --}}
         <div class="text-center mb-12 scroll-reveal">
             <h3 class="text-3xl font-bold text-[#2c3e50] font-playfair mb-4">Ketua Departemen</h3>
-            <p class="text-lg text-slate-600 max-w-2xl mx-auto">Para pemimpin visioner yang mengarahkan setiap departemen menuju inovasi dan keunggulan.</p>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">Inspirational leaders driving every department toward innovation and excellence.</p>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach ($struktur['ketua_departemen'] as $item)
@@ -704,21 +702,14 @@
                         <p class="mb-4 text-lg font-medium text-[#2c3e50]">{{ $title }}</p>
                         <div class="grid grid-cols-2 gap-4 border-t pt-2">
                             <div>
-                                <p class="text-xs text-slate-400">Email</p>
-                                <p class="font-semibold">{{ $person->mahasiswa->email ?? '-' }}</p>
+                                <p class="text-xs text-slate-400">Nama</p>
+                                <p class="font-semibold">{{ $person->mahasiswa->nama ?? '-' }}</p>
                             </div>
                             <div>
-                                <p class="text-xs text-slate-400">No. HP</p>
-                                <p class="font-semibold">{{ $person->mahasiswa->no_hp ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-400">Instagram</p>
-                                <p class="font-semibold text-pink-600">
-                                    {{ $person->mahasiswa->instagram ? '@' . ltrim(str_replace(['https://instagram.com/', 'http://instagram.com/', '@'], '', $person->mahasiswa->instagram), '/') : '-' }}
-                                </p>
+                                <p class="text-xs text-slate-400">Nim</p>
+                                <p class="font-semibold">{{ $person->mahasiswa->nim ?? '-' }}</p>
                             </div>
                         </div>
-
                         <div class="mt-4 flex gap-3">
                             @if($person->mahasiswa->instagram)
                                 <a href="{{ $person->mahasiswa->instagram }}" target="_blank" class="text-pink-600 hover:text-pink-700 text-2xl"><i class="fab fa-instagram"></i></a>
@@ -756,18 +747,12 @@
                 <p class="mb-4 text-lg font-medium text-[#2c3e50]">{{ $item->departemen->nama }}</p>
                 <div class="grid grid-cols-2 gap-4 border-t pt-2">
                     <div>
-                        <p class="text-xs text-slate-400">Email</p>
-                        <p class="font-semibold">{{ $item->mahasiswa->email ?? '-' }}</p>
+                        <p class="text-xs text-slate-400">Nama</p>
+                        <p class="font-semibold">{{ $item->mahasiswa->nama ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-400">No. HP</p>
-                        <p class="font-semibold">{{ $item->mahasiswa->no_hp ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400">Instagram</p>
-                        <p class="font-semibold text-pink-600">
-                            {{ $item->mahasiswa->instagram ? '@' . ltrim(str_replace(['https://instagram.com/', 'http://instagram.com/', '@'], '', $item->mahasiswa->instagram), '/') : '-' }}
-                        </p>
+                        <p class="text-xs text-slate-400">Nim</p>
+                        <p class="font-semibold">{{ $item->mahasiswa->nim ?? '-' }}</p>
                     </div>
                 </div>
                 <div class="mt-4 flex gap-3">

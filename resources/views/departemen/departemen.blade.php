@@ -138,9 +138,9 @@
           <h3 class="text-base font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">
             {{ $item->nama }}
           </h3>
-          <p class="text-slate-600 text-xs mb-3 leading-snug line-clamp-2">
-            {{ \Illuminate\Support\Str::limit($item->deskripsi, 70, '...') }}
-          </p>
+            <p class="text-slate-600 text-xs mb-3 leading-snug line-clamp-2">
+                {{ \Illuminate\Support\Str::limit(strip_tags($item->deskripsi), 70, '...') }}
+            </p>
 
           <a href="{{ url('/departemen/' . $item->id) }}"
             class="inline-flex items-center justify-center space-x-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1.5 rounded-md text-xs font-semibold hover:shadow-md transform hover:scale-105 transition duration-300 group/btn">

@@ -126,11 +126,8 @@
                                                     </span>
                                                 </div>
 
-                                                {{-- Deskripsi program lengkap --}}
-                                                <div class="mb-8">
-                                                    <p class="text-slate-700 leading-relaxed text-justify md:text-justify whitespace-pre-line">
-                                                        {{ $program->deskripsi }}
-                                                    </p>
+                                                <div class="text-slate-700 leading-relaxed text-justify md:text-justify prose max-w-none">
+                                                    {!! $program->deskripsi !!}
                                                 </div>
 
                                                 {{-- Galeri foto --}}
@@ -180,18 +177,6 @@
                                     <div class="text-center max-w-md mx-auto">
                                         <h4 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">{{ $departemen->ketua->nama }}</h4>
                                         <p class="text-blue-600 font-semibold text-lg mb-4">{{ $departemen->ketua->nim }}</p>
-                                        
-                                        <div class="space-y-3 mb-6 text-slate-600">
-                                            <div class="flex items-center justify-center space-x-3">
-                                                <i class="fas fa-envelope text-blue-500"></i>
-                                                <span class="text-sm md:text-base break-all">{{ $departemen->ketua->email }}</span>
-                                            </div>
-                                            <div class="flex items-center justify-center space-x-3">
-                                                <i class="fas fa-phone text-cyan-500"></i>
-                                                <span class="text-sm md:text-base">{{ $departemen->ketua->no_hp }}</span>
-                                            </div>
-                                        </div>
-
                                         <div class="flex justify-center gap-6">
                                             @if ($departemen->ketua->instagram)
                                                 <a href="{{ $departemen->ketua->instagram }}" target="_blank" 
@@ -251,18 +236,6 @@
                                                         {{ $anggota->mahasiswa->nama }}
                                                     </h4>
                                                     <p class="text-cyan-600 font-semibold text-sm mb-4">{{ $anggota->mahasiswa->nim }}</p>
-                                                    
-                                                    <div class="space-y-2 text-sm text-slate-600 mb-4">
-                                                        <div class="flex items-center justify-center space-x-2">
-                                                            <i class="fas fa-envelope text-blue-500 text-xs"></i>
-                                                            <span class="text-xs break-all">{{ $anggota->mahasiswa->email }}</span>
-                                                        </div>
-                                                        <div class="flex items-center justify-center space-x-2">
-                                                            <i class="fas fa-phone text-cyan-500 text-xs"></i>
-                                                            <span class="text-xs">{{ $anggota->mahasiswa->no_hp }}</span>
-                                                        </div>
-                                                    </div>
-
                                                     <div class="flex justify-center gap-4">
                                                         @if ($anggota->mahasiswa->instagram)
                                                             <a href="{{ $anggota->mahasiswa->instagram }}" target="_blank" 
