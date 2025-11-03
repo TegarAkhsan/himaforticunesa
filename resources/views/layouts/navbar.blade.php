@@ -38,18 +38,19 @@
                         @endif
                     </ul>
                 </div>
-                {{-- AKHIR BAGIAN YANG DIUBAH --}}
+
 
                 <a href="{{ url('history') }}" class="text-gray-700 hover:text-blue-600 font-medium {{ request()->is('history') ? 'text-blue-600' : '' }}">History</a>
                 <a href="{{ url('berita') }}" class="text-gray-700 hover:text-blue-600 font-medium {{ request()->is('berita') ? 'text-blue-600' : '' }}">Artikel</a>
                 <a href="{{ url('merchandise') }}" class="text-gray-700 hover:text-blue-600 font-medium {{ request()->is('merchandise') ? 'text-blue-600' : '' }}">Merchandise</a>
+                <a href="{{ url('merchandise') }}" class="text-white bg-blue-600 font-medium px-4 py-2 rounded-md {{ request()->is('merchandise') ? 'bg-blue-600' : '' }}">Dokumen</a>
             </div>
             <div class="flex items-center md:hidden">
                 <button id="mobile-menu-btn" class="text-gray-600 focus:outline-none"><i class="fas fa-bars fa-lg"></i></button>
             </div>
         </div>
     </div>
-    {{-- Kode menu mobile Anda di sini... --}}
+
 </nav>
 
 <main class="pt-16">
@@ -68,13 +69,23 @@
                 <h5 class="text-[#d4af37] font-bold mb-3 tracking-widest">Contact</h5>
                 <ul class="text-gray-300 space-y-2">
                     <li><a href="https://wa.me/6281234648067" target="_blank" class="flex items-center gap-2 hover:text-yellow-400"><i class="fab fa-whatsapp"></i>081234648067</a></li>
-                    <li><a href="mailto:himaforticunesa@gmail.com" class="flex items-center gap-2 hover:text-yellow-400"><i class="fas fa-envelope"></i>himaforticunesa@gmail.com</a></li>
+                    <li><a  class="flex items-center gap-2 hover:text-yellow-400"><i class="fas fa-envelope"></i>himaforticunesa</a></li>
                 </ul>
             </div>
-            <div>
-                <h5 class="text-[#d4af37] font-bold mb-3 tracking-widest">Sosial Media</h5>
-                <div class="flex gap-4 text-gray-300"><a href="#" class="hover:text-yellow-400"><i class="fab fa-tiktok fa-lg"></i></a><a href="#" class="hover:text-yellow-400"><i class="fab fa-instagram fa-lg"></i></a><a href="#" class="hover:text-yellow-400"><i class="fab fa-linkedin fa-lg"></i></a></div>
-            </div>
+                <div>
+                    <h5 class="text-[#d4af37] font-bold mb-3 tracking-widest">Sosial Media</h5>
+                    <div class="flex gap-4 text-gray-300">
+                        <a href="https://www.tiktok.com/@himafortic_unesa?_r=1&_t=ZS-915kVkxBZo8" target="_blank" rel="noopener noreferrer" class="hover:text-yellow-400">
+                            <i class="fab fa-tiktok fa-lg"></i>
+                        </a>
+                        <a href="https://www.instagram.com/himafortic_unesa?igsh=MXQ4cWg0cG1jcGI1MA==" target="_blank" rel="noopener noreferrer" class="hover:text-yellow-400">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="" target="_blank" rel="noopener noreferrer" class="hover:text-yellow-400">
+                            <i class="fab fa-linkedin fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
         </div>
         <div class="text-center text-gray-400 mt-8 pt-6 border-t border-gray-700">© HIMAFORTIC 2025</div>
     </div>

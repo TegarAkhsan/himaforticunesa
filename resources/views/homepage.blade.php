@@ -21,21 +21,21 @@
 
   <!-- Content -->
   <div class="relative z-10 text-center px-6 sm:px-8">
-    <h1 class="text-6xl md:text-7xl font-extrabold text-blue-900 tracking-tight mb-6">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-900 tracking-tight mb-4 sm:mb-6">
       HIMAFORTIC 
     </h1>
-    <h1 class="text-6xl md:text-7xl font-extrabold text-blue-900 tracking-tight mb-6">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-900 tracking-tight mb-4 sm:mb-6">
       UNESA
     </h1>
-    <div class="w-56 h-1 mx-auto bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 rounded-full mb-8"></div>
-    <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-600 leading-relaxed">
+    <div class="w-40 sm:w-48 md:w-56 h-1 mx-auto bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 rounded-full mb-6 sm:mb-8"></div>
+    <p class="max-w-2xl sm:max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed sm:leading-relaxed px-2 sm:px-0">
       Memberdayakan mahasiswa melalui teknologi, inovasi, dan komunitas. 
       Bergabunglah dengan kami dalam membentuk masa depan transformasi digital.
     </p>
   </div>
 
   <style>
-
+    /* Animasi pop-up smooth tanpa mantul */
     @keyframes home-popup {
       0% {
         transform: scale(0.5) translate(0, 0);
@@ -120,6 +120,16 @@
       animation-play-state: paused;
     }
     
+    /* Responsive adjustments for icons */
+    @media (max-width: 1024px) {
+      .home-popup-icon {
+        width: 55px;
+        height: 55px;
+        padding: 9px;
+        border-radius: 13px;
+      }
+    }
+    
     @media (max-width: 768px) {
       .home-popup-icon {
         width: 48px;
@@ -129,15 +139,34 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 640px) {
       .home-popup-icon {
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         padding: 7px;
+        border-radius: 11px;
       }
     }
 
+    @media (max-width: 480px) {
+      .home-popup-icon {
+        width: 40px;
+        height: 40px;
+        padding: 6px;
+        border-radius: 10px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .home-popup-icon {
+        width: 36px;
+        height: 36px;
+        padding: 5px;
+        border-radius: 9px;
+      }
+    }
 
+    /* Text safe zone */
     .text-safe-zone {
       position: relative;
       z-index: 10;
@@ -145,6 +174,19 @@
 
     .relative.z-10 {
       z-index: 20 !important;
+    }
+    
+    /* Additional responsive utilities */
+    @media (max-width: 640px) {
+      #home {
+        min-height: 80vh;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      #home {
+        min-height: 70vh;
+      }
     }
   </style>
 
@@ -168,21 +210,18 @@
       // Array untuk menyimpan posisi ikon yang sudah ditempatkan
       const placedIcons = [];
       
-      // JARAK MINIMUM YANG LEBIH KETAT
-      const MIN_DISTANCE_BETWEEN_ICONS = 180; 
-      const ICON_SIZE = 60; 
-      const SAFE_MARGIN = 20; 
+      // JARAK MINIMUM YANG LEBIH KETAT - Responsive adjustment
+      const MIN_DISTANCE_BETWEEN_ICONS = window.innerWidth < 768 ? 140 : 180; 
+      const ICON_SIZE = window.innerWidth < 768 ? 48 : 60; 
+      const SAFE_MARGIN = window.innerWidth < 768 ? 15 : 20; 
 
-      // Area yang harus dihindari (posisi teks) - diperluas
+      // Area yang harus dihindari (posisi teks) - Responsive adjustment
+      const textScale = window.innerWidth < 768 ? 0.7 : 1;
       const avoidZones = [
-
-        { x: centerX - 280, y: centerY - 200, width: 560, height: 140 },
-        // Area UNESA (tengah) - diperluas
-        { x: centerX - 200, y: centerY - 60, width: 400, height: 140 },
-        // Area garis pembatas - diperluas
-        { x: centerX - 180, y: centerY + 90, width: 360, height: 15 },
-        // Area deskripsi (bawah) - diperluas
-        { x: centerX - 380, y: centerY + 130, width: 760, height: 160 }
+        { x: centerX - 280 * textScale, y: centerY - 200 * textScale, width: 560 * textScale, height: 140 * textScale },
+        { x: centerX - 200 * textScale, y: centerY - 60 * textScale, width: 400 * textScale, height: 140 * textScale },
+        { x: centerX - 180 * textScale, y: centerY + 90 * textScale, width: 360 * textScale, height: 15 * textScale },
+        { x: centerX - 380 * textScale, y: centerY + 130 * textScale, width: 760 * textScale, height: 160 * textScale }
       ];
       
       // Fungsi untuk mengecek apakah posisi bertabrakan dengan area teks
@@ -231,13 +270,12 @@
         return Math.sqrt(Math.pow(x - textCenterX, 2) + Math.pow(y - textCenterY, 2));
       }
       
-      // Fungsi untuk menghitung skala berdasarkan jarak
+      // Fungsi untuk menghitung skala berdasarkan jarak - Responsive adjustment
       function calculateScale(distance) {
-        // Semakin dekat dengan teks, semakin kecil (0.1 - 1.8)
-        const minDistance = 50;
-        const maxDistance = 800;
+        const minDistance = window.innerWidth < 768 ? 30 : 50;
+        const maxDistance = window.innerWidth < 768 ? 500 : 800;
         const minScale = 0.1;
-        const maxScale = 1.8;
+        const maxScale = window.innerWidth < 768 ? 1.5 : 1.8;
         
         if (distance <= minDistance) return minScale;
         if (distance >= maxDistance) return maxScale;
@@ -248,10 +286,9 @@
       
       // ALGORITMA BARU: Grid-based positioning dengan collision avoidance
       function getStrictlySeparatedPosition(index, total) {
-        const maxAttempts = 200; 
+        const maxAttempts = window.innerWidth < 768 ? 150 : 200; 
         
-
-        const gridCols = Math.ceil(Math.sqrt(total * 1.5)); 
+        const gridCols = Math.ceil(Math.sqrt(total * (window.innerWidth < 768 ? 1.2 : 1.5))); 
         const gridRows = Math.ceil(total / gridCols);
         
         const cellWidth = containerRect.width / gridCols;
@@ -274,32 +311,34 @@
             candidateY += (Math.random() - 0.5) * cellHeight * 0.6;
           }
           
-          // Pastikan posisi tidak terlalu dekat dengan border
-          const borderMargin = ICON_SIZE + 40;
+          // Pastikan posisi tidak terlalu dekat dengan border - Responsive adjustment
+          const borderMargin = ICON_SIZE + (window.innerWidth < 768 ? 30 : 40);
           if (candidateX < borderMargin || candidateX > containerRect.width - borderMargin ||
               candidateY < borderMargin || candidateY > containerRect.height - borderMargin) {
             attempts++;
             continue;
           }
           
-
+          // Cek apakah posisi aman dari teks
           if (!isPositionSafe(candidateX, candidateY)) {
             attempts++;
             continue;
           }
           
+          // Cek apakah posisi cukup jauh dari ikon lain
           if (!isFarEnoughFromOtherIcons(candidateX, candidateY)) {
             attempts++;
             continue;
           }
           
-          const driftX = (Math.random() - 0.5) * 10;
+          // Nilai drift - Responsive adjustment
+          const driftX = (Math.random() - 0.5) * (window.innerWidth < 768 ? 8 : 10);
           
-
+          // Hitung skala berdasarkan jarak dari teks
           const distanceFromText = calculateDistanceFromText(candidateX, candidateY);
           const scale = calculateScale(distanceFromText);
           
-
+          // Simpan posisi ikon yang berhasil ditempatkan
           placedIcons.push({ x: candidateX, y: candidateY });
           
           return { 
@@ -317,7 +356,7 @@
       
       // ALGORITMA FALLBACK: Force-directed placement
       function getForceDirectedPosition(index, total) {
-        const maxFallbackAttempts = 100;
+        const maxFallbackAttempts = window.innerWidth < 768 ? 80 : 100;
         
         for (let attempt = 0; attempt < maxFallbackAttempts; attempt++) {
           // Coba posisi di area yang kurang padat
@@ -325,7 +364,7 @@
           const candidateY = Math.random() * (containerRect.height - 120) + 60;
           
           // Cek semua constraint
-          const borderMargin = ICON_SIZE + 30;
+          const borderMargin = ICON_SIZE + (window.innerWidth < 768 ? 20 : 30);
           if (candidateX < borderMargin || candidateX > containerRect.width - borderMargin ||
               candidateY < borderMargin || candidateY > containerRect.height - borderMargin) {
             continue;
@@ -339,7 +378,7 @@
             continue;
           }
           
-          const driftX = (Math.random() - 0.5) * 8;
+          const driftX = (Math.random() - 0.5) * (window.innerWidth < 768 ? 6 : 8);
           const distanceFromText = calculateDistanceFromText(candidateX, candidateY);
           const scale = calculateScale(distanceFromText);
           
@@ -353,12 +392,13 @@
           };
         }
         
-        // ULTIMATE FALLBACK: Posisi di sudut dengan jarak maksimal
+        // ULTIMATE FALLBACK: Posisi di sudut dengan jarak maksimal - Responsive adjustment
+        const cornerDistance = window.innerWidth < 768 ? 60 : 80;
         const corners = [
-          { x: 80, y: 80 },
-          { x: containerRect.width - 80, y: 80 },
-          { x: 80, y: containerRect.height - 80 },
-          { x: containerRect.width - 80, y: containerRect.height - 80 }
+          { x: cornerDistance, y: cornerDistance },
+          { x: containerRect.width - cornerDistance, y: cornerDistance },
+          { x: cornerDistance, y: containerRect.height - cornerDistance },
+          { x: containerRect.width - cornerDistance, y: containerRect.height - cornerDistance }
         ];
         
         const corner = corners[index % corners.length];
@@ -385,8 +425,11 @@
         return shuffled;
       }
       
-
+      // Tambahkan ikon dengan animasi smooth tanpa mantul - Responsive timing
       const shuffledIcons = shuffleArray(homeIcons);
+      const animationDelay = window.innerWidth < 768 ? 0.15 : 0.25;
+      const animationInterval = window.innerWidth < 768 ? 150 : 250;
+      
       shuffledIcons.forEach((icon, index) => {
         setTimeout(() => {
           const img = document.createElement('img');
@@ -399,18 +442,19 @@
           img.style.setProperty('--ty', `${position.ty}px`);
           img.style.setProperty('--drift-x', position.driftX);
           img.style.setProperty('--scale', position.scale);
-          img.style.setProperty('--delay', `${index * 0.25}s`);
+          img.style.setProperty('--delay', `${index * animationDelay}s`);
           
           // Pusat
-          img.style.left = `${centerX - 30}px`;
-          img.style.top = `${centerY - 30}px`;
+          const iconCenterOffset = window.innerWidth < 768 ? 24 : 30;
+          img.style.left = `${centerX - iconCenterOffset}px`;
+          img.style.top = `${centerY - iconCenterOffset}px`;
           
           homeContainer.appendChild(img);
           
-        }, index * 250);
+        }, index * animationInterval);
       });
       
-      // Hover
+      // Hover effect untuk teks
       const heroTexts = document.querySelectorAll('h1');
       heroTexts.forEach(text => {
         text.addEventListener('mouseenter', function() {
@@ -423,11 +467,26 @@
         });
       });
 
-      // safe zone teks
+      // Safe zone untuk teks
       const contentDiv = document.querySelector('.relative.z-10');
       if (contentDiv) {
         contentDiv.classList.add('text-safe-zone');
       }
+      
+      // Handle window resize
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          // Refresh positions on resize for better responsiveness
+          const existingIcons = homeContainer.querySelectorAll('.home-popup-icon');
+          existingIcons.forEach(icon => icon.remove());
+          placedIcons.length = 0;
+          
+          // Reinitialize with new dimensions
+          document.dispatchEvent(new Event('DOMContentLoaded'));
+        }, 250);
+      });
     });
   </script>
 </section>

@@ -24,8 +24,7 @@ class HimaforticForm
                 ->image()
                 ->directory('himafortic') // simpan di storage/app/public/himafortic
                 ->disk('public')
-                ->preserveFilenames()
-                ->maxSize(2048), // 2MB max
+                ->preserveFilenames(),
 
                 RichEditor::make('deskripsi')
                     ->label('Deskripsi')

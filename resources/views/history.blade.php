@@ -24,7 +24,13 @@
 <section class="py-20 bg-gradient-to-b from-white to-blue-50/20">
     <div class="max-w-6xl mx-auto px-6 space-y-20">
 
-        @foreach(\App\Models\Himafortic::with(['ketua', 'wakil'])->orderByDesc('tahun_periode')->get() as $periode)
+        @php
+            $periodes = \App\Models\Himafortic::with(['ketua', 'wakil'])
+                        ->orderByDesc('tahun_periode')
+                        ->get();
+        @endphp
+
+        @foreach($periodes as $periode)
         <article class="bg-white/90 backdrop-blur-sm shadow-lg rounded-3xl overflow-hidden border border-blue-100/60 transition hover:shadow-2xl hover:-translate-y-1 duration-300">
             <div class="p-8 md:p-12">
 
@@ -105,7 +111,19 @@
         </article>
         @endforeach
 
+        {{-- === COMING SOON === --}}
+        @if ($periodes->count() < 2)
+            <div class="text-center mt-16">
+                <p class="text-2xl md:text-3xl font-bold text-slate-400 italic animate-pulse">
+                    Nantikan History Lainnya
+                </p>
+                <p class="text-2xl md:text-3xl font-bold text-slate-400 italic animate-pulse">
+                    🚀 Coming Soon...
+                </p>
+            </div>
+        @endif
     </div>
 </section>
+
 
 @endsection

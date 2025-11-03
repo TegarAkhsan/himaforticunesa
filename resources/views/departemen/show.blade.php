@@ -69,90 +69,103 @@
                             </h2>
                             <div class="max-w-5xl mx-auto">
                                 <p class="text-slate-700 text-lg leading-relaxed text-justify md:text-justify">
-                                    {{ $departemen->deskripsi }}
+                                    {{ strip_tags($departemen->deskripsi) }}
                                 </p>
                             </div>
                         </div>
 
-                        {{-- === PROGRAM KERJA DEPARTEMEN === --}}
-                        <div class="mb-16">
-                            <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-800 mb-8 md:mb-12">
-                                <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                                    Program Kerja Departemen
+{{-- === PROGRAM KERJA DEPARTEMEN === --}}
+<div class="mb-16">
+    <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-800 mb-8 md:mb-12">
+        <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+            Program Kerja Departemen
+        </span>
+    </h3>
+
+    @if ($departemen->programKerja->isEmpty())
+        <div class="text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+            <div class="w-20 h-20 mx-auto mb-4 text-slate-400">
+                <i class="fas fa-calendar-check text-5xl"></i>
+            </div>
+            <p class="text-slate-500 text-lg italic">Belum ada program kerja yang tercatat.</p>
+        </div>
+    @else
+        <div class="space-y-8">
+            @foreach ($departemen->programKerja as $program)
+                <div class="group bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-blue-100 hover:border-blue-200">
+                    {{-- Foto utama --}}
+                    @php
+                        $fotoUtama = $program->fotoProgram->first();
+                    @endphp
+
+                    @if ($fotoUtama && $fotoUtama->foto1)
+                        <div class="relative h-64 md:h-72 lg:h-80 overflow-hidden">
+                            <img src="{{ asset('storage/' . $fotoUtama->foto1) }}" 
+                                 alt="{{ $program->nama }}" 
+                                 class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/30 to-transparent"></div>
+                            <div class="absolute top-4 right-4">
+                                <span class="text-white text-xs font-semibold bg-blue-600/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                                    Program Kerja
                                 </span>
-                            </h3>
-
-                            @if ($departemen->programKerja->isEmpty())
-                                <div class="text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                                    <div class="w-20 h-20 mx-auto mb-4 text-slate-400">
-                                        <i class="fas fa-calendar-check text-5xl"></i>
-                                    </div>
-                                    <p class="text-slate-500 text-lg italic">Belum ada program kerja yang tercatat.</p>
-                                </div>
-                            @else
-                                <div class="space-y-8">
-                                    @foreach ($departemen->programKerja as $program)
-                                        <div class="group bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-blue-100 hover:border-blue-200">
-                                            {{-- Foto utama --}}
-                                            @php
-                                                $fotoUtama = $program->fotoProgram->first();
-                                            @endphp
-
-                                            @if ($fotoUtama && $fotoUtama->foto1)
-                                                <div class="relative h-64 md:h-72 lg:h-80 overflow-hidden">
-                                                    <img src="{{ asset('storage/' . $fotoUtama->foto1) }}" 
-                                                         alt="{{ $program->nama }}" 
-                                                         class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
-                                                    <div class="absolute inset-0 bg-gradient-to-t from-blue-900/30 to-transparent"></div>
-                                                    <div class="absolute top-4 right-4">
-                                                        <span class="text-white text-xs font-semibold bg-blue-600/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                                                            Program Kerja
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            @endif
-
-                                            <div class="p-6 md:p-8">
-                                                <h4 class="text-2xl md:text-3xl font-bold text-blue-900 mb-4 group-hover:text-blue-800 transition-colors">
-                                                    {{ $program->nama }}
-                                                </h4>
-
-                                                <div class="flex items-center text-slate-600 mb-6">
-                                                    <i class="fa-regular fa-calendar text-blue-600 mr-3 text-lg"></i>
-                                                    <span class="text-sm md:text-base">
-                                                        {{ \Carbon\Carbon::parse($program->tanggal_mulai)->translatedFormat('d F Y') }}
-                                                        –
-                                                        {{ \Carbon\Carbon::parse($program->tanggal_selesai)->translatedFormat('d F Y') }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="text-slate-700 leading-relaxed text-justify md:text-justify prose max-w-none">
-                                                    {!! $program->deskripsi !!}
-                                                </div>
-
-                                                {{-- Galeri foto --}}
-                                                @if ($program->fotoProgram && $program->fotoProgram->count() > 0)
-                                                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                                                        @foreach ($program->fotoProgram as $foto)
-                                                            @foreach (['foto2', 'foto3',] as $fotoField)
-                                                                @if ($foto->$fotoField)
-                                                                    <div class="relative group/image overflow-hidden rounded-xl">
-                                                                        <img src="{{ asset('storage/' . $foto->$fotoField) }}" 
-                                                                             alt="Foto {{ $program->nama }}" 
-                                                                             class="w-full h-32 object-cover transform group-hover/image:scale-110 transition duration-500">
-                                                                        <div class="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition duration-300"></div>
-                                                                    </div>
-                                                                @endif
-                                                            @endforeach
-                                                        @endforeach
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
+                            </div>
                         </div>
+                    @endif
+
+                    <div class="p-6 md:p-8">
+                        <h4 class="text-2xl md:text-3xl font-bold text-blue-900 mb-4 group-hover:text-blue-800 transition-colors">
+                            {{ $program->nama }}
+                        </h4>
+
+                        <div class="flex items-center text-slate-600 mb-6">
+                            <i class="fa-regular fa-calendar text-blue-600 mr-3 text-lg"></i>
+                            <span class="text-sm md:text-base">
+                                {{ \Carbon\Carbon::parse($program->tanggal_mulai)->translatedFormat('d F Y') }}
+                                –
+                                {{ \Carbon\Carbon::parse($program->tanggal_selesai)->translatedFormat('d F Y') }}
+                            </span>
+                        </div>
+
+                        <div class="text-slate-700 leading-relaxed text-justify md:text-justify prose max-w-none">
+                            {!! $program->deskripsi !!}
+                        </div>
+
+                        {{-- Galeri foto --}}
+                        @if ($program->fotoProgram && $program->fotoProgram->count() > 0)
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+                                @foreach ($program->fotoProgram as $foto)
+                                    @foreach (['foto2', 'foto3'] as $fotoField)
+                                        @if ($foto->$fotoField)
+                                            <div class="relative group/image overflow-hidden rounded-xl">
+                                                <img src="{{ asset('storage/' . $foto->$fotoField) }}" 
+                                                     alt="Foto {{ $program->nama }}" 
+                                                     class="w-full h-32 object-cover transform group-hover/image:scale-110 transition duration-500">
+                                                <div class="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition duration-300"></div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- === COMING SOON === --}}
+        @if ($departemen->programKerja->count() < 2)
+            <div class="mt-12 text-center">
+                <p class="text-2xl md:text-3xl font-bold text-slate-400 italic animate-pulse">
+                    Nantikan Program Kerja Lainnya
+                </p>
+                <p class="text-2xl md:text-3xl font-bold text-slate-400 italic animate-pulse">
+                    🚀 Coming Soon...
+                </p>
+            </div>
+        @endif
+    @endif
+</div>
+
 
                         {{-- Ketua Departemen --}}
                         @if ($departemen->ketua)
@@ -318,7 +331,7 @@
                                                 {{ $dep->nama }}
                                             </h4>
                                             <p class="text-xs text-slate-500 line-clamp-2">
-                                                {{ Str::limit($dep->deskripsi, 60) }}
+                                                {{ Str::limit(strip_tags($dep->deskripsi), 60) }}
                                             </p>
                                         </div>
                                     </div>
