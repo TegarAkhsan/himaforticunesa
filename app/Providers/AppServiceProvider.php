@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Departemen;
+use App\Models\File;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,11 +22,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-    View::composer('layouts.navbar', function ($view) {
-        $departemen = Departemen::all();
-        
-        
-        $view->with('departemen', $departemen);
+        View::composer('layouts.navbar', function ($view) {
+            $departemen = Departemen::all();
+            $files = File::latest()->take(10)->get();
+
+            $view->with([
+                'departemen' => $departemen,
+                'files' => $files,
+            ]);
         });
     }
 }
