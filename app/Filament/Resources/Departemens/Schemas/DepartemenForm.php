@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Set;
 
 class DepartemenForm
 {
@@ -17,12 +18,19 @@ class DepartemenForm
             TextInput::make('nama')
                 ->label('Nama Departemen')
                 ->required()
-                ->maxLength(255),
+                ->maxLength(255)
+                ->live(onBlur: true)
+                ->afterStateUpdated(fn(string $operation, $state, \Filament\Forms\Set $set) => $operation === 'create' ? $set('slug', \Illuminate\Support\Str::slug($state)) : null),
 
-            RichEditor::make('deskripsi') 
-                    ->required()
-                    ->columnSpanFull(),
-                
+            TextInput::make('slug')
+                ->required()
+                ->maxLength(255)
+                ->unique(ignoreRecord: true),
+
+            RichEditor::make('deskripsi')
+                ->required()
+                ->columnSpanFull(),
+
             Select::make('ketua_id')
                 ->label('Ketua')
                 ->options(\App\Models\Mahasiswa::pluck('nama', 'id'))

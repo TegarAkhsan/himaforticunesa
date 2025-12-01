@@ -1,462 +1,312 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
 @section('content')
-<section class="relative py-20 overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
-    <div class="absolute top-0 left-0 w-full h-full">
-        <div class="absolute top-10 left-10 w-20 h-20 bg-blue-400/20 rounded-full mix-blend-soft-light filter blur-xl animate-pulse"></div>
-        <div class="absolute top-40 right-10 w-24 h-24 bg-cyan-400/20 rounded-full mix-blend-soft-light filter blur-xl animate-pulse animation-delay-2000"></div>
-        <div class="absolute bottom-20 left-20 w-16 h-16 bg-indigo-400/20 rounded-full mix-blend-soft-light filter blur-xl animate-pulse animation-delay-4000"></div>
-    </div>
-    
-    <div class="relative max-w-6xl mx-auto px-4 text-center">
-        <div class="inline-block mb-4">
-            <span class="text-xs font-semibold tracking-wider text-blue-200 uppercase bg-blue-700/50 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-500/30">
-                Departemen HIMAFORTIC
-            </span>
-        </div>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
-            {{ $departemen->nama }}
-        </h1>
-        <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
-            Struktur, Anggota, dan Program Kerja Departemen HIMAFORTIC
-        </p>
-        <div class="mt-8 flex justify-center space-x-3">
-            <div class="w-2 h-2 bg-blue-300 rounded-full animate-bounce"></div>
-            <div class="w-2 h-2 bg-cyan-300 rounded-full animate-bounce animation-delay-200"></div>
-            <div class="w-2 h-2 bg-indigo-300 rounded-full animate-bounce animation-delay-400"></div>
-        </div>
-    </div>
-</section>
+<!-- Main Container -->
+<div class="relative min-h-screen overflow-hidden text-slate-200 selection:bg-cyan-500/30">
 
-<section class="py-16 bg-gradient-to-b from-slate-50 to-blue-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- Ambient Background Effects -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div class="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] animate-pulse"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-cyan-500/10 rounded-full blur-[150px] animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-900/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Hero Header -->
+        <div class="relative mb-16 rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl group">
             
-            <!-- Main Content (Left - 3/4 width) -->
-            <div class="lg:col-span-3">
-                <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-blue-100/50">
+            <!-- Background Image -->
+            @if($departemen->foto)
+                <div class="absolute inset-0">
+                    <img src="{{ asset('storage/' . $departemen->foto) }}" alt="{{ $departemen->nama }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#020617] via-[#020617]/90 to-transparent"></div>
+                </div>
+            @else
+                <div class="absolute inset-0 bg-[#0f172a]">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
+                </div>
+            @endif
 
-                    {{-- Hero Image --}}
-                    @if ($departemen->foto)
-                        <div class="relative bg-blue-50 flex items-center justify-center h-auto md:h-[400px] lg:h-[500px] overflow-hidden">
-                            <img src="{{ asset('storage/' . $departemen->foto) }}" 
-                                alt="{{ $departemen->nama }}" 
-                                class="w-full h-auto object-contain transition duration-700 transform hover:scale-105">
-                            
-                            <!-- Gradient Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none"></div>
-
-                            <!-- Label -->
-                            <div class="absolute bottom-6 left-6">
-                                <span class="text-white text-sm font-semibold bg-blue-600/90 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                                    Departemen {{ $departemen->nama }}
-                                </span>
-                            </div>
-                        </div>
-                    @endif
-
-
-                    <div class="p-6 md:p-8 lg:p-12">
-                        {{-- Department Info --}}
-                        <div class="text-center mb-12">
-                            <div class="flex items-center justify-center space-x-2 mb-6">
-                                <div class="w-3 h-0.5 bg-blue-500 rounded-full"></div>
-                                <div class="w-3 h-0.5 bg-cyan-500 rounded-full"></div>
-                                <div class="w-3 h-0.5 bg-indigo-500 rounded-full"></div>
-                            </div>
-                            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-800 to-cyan-700 bg-clip-text text-transparent mb-6">
-                                {{ $departemen->nama }}
-                            </h2>
-                            <div class="max-w-5xl mx-auto">
-                                <p class="text-slate-700 text-lg leading-relaxed text-justify md:text-justify">
-                                    {{ strip_tags($departemen->deskripsi) }}
-                                </p>
-                            </div>
-                        </div>
-
-{{-- === PROGRAM KERJA DEPARTEMEN === --}}
-<div class="mb-16">
-    <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-800 mb-8 md:mb-12">
-        <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            Program Kerja Departemen
-        </span>
-    </h3>
-
-    @if ($departemen->programKerja->isEmpty())
-        <div class="text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-            <div class="w-20 h-20 mx-auto mb-4 text-slate-400">
-                <i class="fas fa-calendar-check text-5xl"></i>
-            </div>
-            <p class="text-slate-500 text-lg italic">Belum ada program kerja yang tercatat.</p>
-        </div>
-    @else
-        <div class="space-y-8">
-            @foreach ($departemen->programKerja as $program)
-                <div class="group bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-blue-100 hover:border-blue-200">
-                    {{-- Foto utama --}}
-                    @php
-                        $fotoUtama = $program->fotoProgram->first();
-                    @endphp
-
-                    @if ($fotoUtama && $fotoUtama->foto1)
-                        <div class="relative h-64 md:h-72 lg:h-80 overflow-hidden">
-                            <img src="{{ asset('storage/' . $fotoUtama->foto1) }}" 
-                                 alt="{{ $program->nama }}" 
-                                 class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/30 to-transparent"></div>
-                            <div class="absolute top-4 right-4">
-                                <span class="text-white text-xs font-semibold bg-blue-600/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                                    Program Kerja
-                                </span>
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="p-6 md:p-8">
-                        <h4 class="text-2xl md:text-3xl font-bold text-blue-900 mb-4 group-hover:text-blue-800 transition-colors">
-                            {{ $program->nama }}
-                        </h4>
-
-                        <div class="flex items-center text-slate-600 mb-6">
-                            <i class="fa-regular fa-calendar text-blue-600 mr-3 text-lg"></i>
-                            <span class="text-sm md:text-base">
-                                {{ \Carbon\Carbon::parse($program->tanggal_mulai)->translatedFormat('d F Y') }}
-                                –
-                                {{ \Carbon\Carbon::parse($program->tanggal_selesai)->translatedFormat('d F Y') }}
-                            </span>
-                        </div>
-
-                        <div class="text-slate-700 leading-relaxed text-justify md:text-justify prose max-w-none">
-                            {!! $program->deskripsi !!}
-                        </div>
-
-                        {{-- Galeri foto --}}
-                        @if ($program->fotoProgram && $program->fotoProgram->count() > 0)
-                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-                                @foreach ($program->fotoProgram as $foto)
-                                    @foreach (['foto2', 'foto3'] as $fotoField)
-                                        @if ($foto->$fotoField)
-                                            <div class="relative group/image overflow-hidden rounded-xl">
-                                                <img src="{{ asset('storage/' . $foto->$fotoField) }}" 
-                                                     alt="Foto {{ $program->nama }}" 
-                                                     class="w-full h-32 object-cover transform group-hover/image:scale-110 transition duration-500">
-                                                <div class="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition duration-300"></div>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            </div>
-                        @endif
+            <div class="relative z-10 p-8 md:p-16 flex flex-col md:flex-row items-center gap-8 md:gap-12 min-h-[400px]">
+                
+                <!-- Text Content -->
+                <div class="flex-1 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300 text-xs font-bold tracking-wider uppercase mb-6 backdrop-blur-md">
+                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                        Departemen HIMAFORTIC
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-black tracking-tight text-white mb-6 leading-tight">
+                        {{ $departemen->nama }}
+                    </h1>
+                    <div class="h-1.5 w-32 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mb-8 mx-auto md:mx-0"></div>
+                    <div class="prose prose-lg prose-invert max-w-2xl text-slate-300 leading-relaxed">
+                        {!! $departemen->deskripsi !!}
                     </div>
                 </div>
-            @endforeach
+            </div>
         </div>
 
-        {{-- === COMING SOON === --}}
-        @if ($departemen->programKerja->count() < 2)
-            <div class="mt-12 text-center">
-                <p class="text-2xl md:text-3xl font-bold text-slate-400 italic animate-pulse">
-                    Nantikan Program Kerja Lainnya
-                </p>
-                <p class="text-2xl md:text-3xl font-bold text-slate-400 italic animate-pulse">
-                    🚀 Coming Soon...
-                </p>
-            </div>
-        @endif
-    @endif
-</div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            
+            <!-- Main Content Area -->
+            <div class="lg:col-span-8 space-y-16">
 
+                <!-- Program Kerja Section -->
+                <section>
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                                <i class="fas fa-rocket text-white text-sm"></i>
+                            </span>
+                            Program Kerja
+                        </h2>
+                        <span class="text-sm text-slate-500 font-medium">{{ $departemen->programKerja->count() }} Program</span>
+                    </div>
 
-                        {{-- Ketua Departemen --}}
-                        @if ($departemen->ketua)
-                            <div class="mb-16">
-                                <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-800 mb-8 md:mb-12">
-                                    <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                                        Ketua Departemen
-                                    </span>
-                                </h3>
-                                
-                                <div class="flex flex-col items-center">
-                                    <div class="relative group mb-6">
-                                        <div class="absolute -inset-4 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-300"></div>
-                                        <img src="{{ asset('storage/' . $departemen->ketua->foto) }}" 
-                                             alt="{{ $departemen->ketua->nama }}" 
-                                             class="relative w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-xl z-10 transform group-hover:scale-105 transition duration-300">
-                                        <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full border-4 border-white flex items-center justify-center shadow-lg">
-                                            <i class="fas fa-crown text-white text-sm"></i>
+                    @if ($departemen->programKerja->isEmpty())
+                        <div class="p-12 rounded-3xl border border-dashed border-slate-700 bg-slate-800/30 text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800 flex items-center justify-center">
+                                <i class="fas fa-calendar-times text-2xl text-slate-600"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-slate-400">Belum ada program kerja</h3>
+                            <p class="text-slate-500 text-sm mt-1">Program kerja akan segera ditambahkan.</p>
+                        </div>
+                    @else
+                        <div class="space-y-6">
+                            @foreach ($departemen->programKerja as $program)
+                                <div class="group relative bg-[#0f172a] rounded-3xl border border-white/5 hover:border-blue-500/30 overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                                    <div class="grid md:grid-cols-12 gap-0">
+                                        <!-- Image -->
+                                        <div class="md:col-span-5 relative h-64 md:h-auto overflow-hidden">
+                                            @php $fotoUtama = $program->fotoProgram->first(); @endphp
+                                            @if ($fotoUtama && $fotoUtama->foto1)
+                                                <img src="{{ asset('storage/' . $fotoUtama->foto1) }}" 
+                                                     alt="{{ $program->nama }}" 
+                                                     class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                                            @else
+                                                <div class="w-full h-full bg-slate-800 flex items-center justify-center">
+                                                    <i class="fas fa-image text-3xl text-slate-600"></i>
+                                                </div>
+                                            @endif
+                                            <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent opacity-80 md:opacity-40"></div>
+                                            
+                                            <!-- Date Badge -->
+                                            <div class="absolute top-4 left-4">
+                                                <div class="px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 flex flex-col items-center text-center">
+                                                    <span class="text-xs font-bold text-blue-400 uppercase">{{ \Carbon\Carbon::parse($program->tanggal_mulai)->format('M') }}</span>
+                                                    <span class="text-lg font-bold text-white leading-none">{{ \Carbon\Carbon::parse($program->tanggal_mulai)->format('d') }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Content -->
+                                        <div class="md:col-span-7 p-6 md:p-8 flex flex-col">
+                                            <h3 class="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                                {{ $program->nama }}
+                                            </h3>
+                                            
+                                            <div class="prose prose-invert prose-sm text-slate-400 line-clamp-2 mb-6 flex-1">
+                                                {!! $program->deskripsi !!}
+                                            </div>
+
+                                            <div class="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
+                                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                                    <i class="far fa-clock"></i>
+                                                    <span>
+                                                        {{ \Carbon\Carbon::parse($program->tanggal_mulai)->diffForHumans() }}
+                                                    </span>
+                                                </div>
+                                                
+                                                <!-- Gallery Indicators -->
+                                                @if ($program->fotoProgram && $program->fotoProgram->count() > 0)
+                                                    <div class="flex -space-x-2">
+                                                        @foreach ($program->fotoProgram as $foto)
+                                                            @foreach (['foto2', 'foto3'] as $fotoField)
+                                                                @if ($foto->$fotoField)
+                                                                    <div class="w-6 h-6 rounded-full border border-[#0f172a] overflow-hidden">
+                                                                        <img src="{{ asset('storage/' . $foto->$fotoField) }}" class="w-full h-full object-cover">
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="text-center max-w-md mx-auto">
-                                        <h4 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">{{ $departemen->ketua->nama }}</h4>
-                                        <p class="text-blue-600 font-semibold text-lg mb-4">{{ $departemen->ketua->nim }}</p>
-                                        <div class="flex justify-center gap-6">
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </section>
+
+                <!-- Anggota Section -->
+                <section>
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                                <i class="fas fa-users text-white text-sm"></i>
+                            </span>
+                            Anggota Departemen
+                        </h2>
+                    </div>
+
+                    <!-- Ketua Card -->
+                    @if ($departemen->ketua)
+                        <div class="mb-10">
+                            <div class="relative group p-[1px] rounded-3xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+                                <div class="bg-[#0f172a] rounded-[1.4rem] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8 relative overflow-hidden">
+                                    <!-- Glow Effect -->
+                                    <div class="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+                                    <div class="relative shrink-0">
+                                        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full p-1 bg-gradient-to-br from-white/20 to-transparent">
+                                            <img src="{{ asset('storage/' . $departemen->ketua->foto) }}" 
+                                                 alt="{{ $departemen->ketua->nama }}" 
+                                                 class="w-full h-full rounded-full object-cover border-4 border-[#0f172a]">
+                                        </div>
+                                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-[10px] font-bold text-white shadow-lg border border-white/20 whitespace-nowrap tracking-wider uppercase">
+                                            Ketua Departemen
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center md:text-left">
+                                        <h3 class="text-2xl font-bold text-white mb-2">{{ $departemen->ketua->nama }}</h3>
+                                        <p class="text-purple-400 font-medium mb-4">{{ $departemen->ketua->nim }}</p>
+                                        <div class="flex justify-center md:justify-start gap-3">
                                             @if ($departemen->ketua->instagram)
-                                                <a href="{{ $departemen->ketua->instagram }}" target="_blank" 
-                                                   class="p-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition duration-300">
-                                                    <i class="fa-brands fa-instagram text-xl"></i>
+                                                <a href="{{ $departemen->ketua->instagram }}" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-purple-500 hover:text-white flex items-center justify-center transition-all duration-300">
+                                                    <i class="fab fa-instagram"></i>
                                                 </a>
                                             @endif
                                             @if ($departemen->ketua->linkedin)
-                                                <a href="{{ $departemen->ketua->linkedin }}" target="_blank" 
-                                                   class="p-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition duration-300">
-                                                    <i class="fa-brands fa-linkedin text-xl"></i>
+                                                <a href="{{ $departemen->ketua->linkedin }}" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all duration-300">
+                                                    <i class="fab fa-linkedin-in"></i>
                                                 </a>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        </div>
+                    @endif
 
-                        {{-- Anggota Departemen --}}
-                        <div class="mb-12">
-                            <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-800 mb-8 md:mb-12">
-                                <span class="bg-gradient-to-r from-cyan-600 to-blue-500 bg-clip-text text-transparent">
-                                    Anggota Departemen
-                                </span>
-                            </h3>
+                    <!-- Staff Grid -->
+                    @php
+                        // Filter staff (exclude ketua)
+                        $staffMembers = $departemen->anggota->filter(function($anggota) use ($departemen) {
+                            return $anggota->mahasiswa && $anggota->mahasiswa->id !== $departemen->ketua_id;
+                        });
+                    @endphp
 
-                            @if ($departemen->anggota->isEmpty())
-                                <div class="text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                                    <div class="w-20 h-20 mx-auto mb-4 text-slate-400">
-                                        <i class="fas fa-users text-5xl"></i>
-                                    </div>
-                                    <p class="text-slate-500 text-lg italic">Belum ada anggota yang terdaftar.</p>
-                                </div>
-                            @else
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                                    @foreach ($departemen->anggota as $anggota)
-                                        @if ($anggota->mahasiswa && $anggota->mahasiswa->id !== $departemen->ketua_id)
-                                            <div class="group bg-gradient-to-br from-white to-blue-50 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-blue-100">
-                                                <div class="relative">
-                                                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                                                        <span class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-1 rounded-full text-xs font-semibold shadow-lg whitespace-nowrap">
-                                                            {{ $anggota->jabatan }}
-                                                        </span>
-                                                    </div>
-                                                    
-                                                    <div class="relative mt-6">
-                                                        <div class="absolute -inset-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur opacity-20 group-hover:opacity-30 transition duration-300"></div>
-                                                        <img src="{{ asset('storage/' . $anggota->mahasiswa->foto) }}" 
-                                                             alt="{{ $anggota->mahasiswa->nama }}" 
-                                                             class="relative w-24 h-24 md:w-28 md:h-28 mx-auto rounded-full object-cover border-4 border-white shadow-lg z-10">
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="text-center mt-6">
-                                                    <h4 class="text-xl font-bold text-slate-800 group-hover:text-slate-900 transition-colors mb-2">
-                                                        {{ $anggota->mahasiswa->nama }}
-                                                    </h4>
-                                                    <p class="text-cyan-600 font-semibold text-sm mb-4">{{ $anggota->mahasiswa->nim }}</p>
-                                                    <div class="flex justify-center gap-4">
-                                                        @if ($anggota->mahasiswa->instagram)
-                                                            <a href="{{ $anggota->mahasiswa->instagram }}" target="_blank" 
-                                                               class="p-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full shadow hover:shadow-md transform hover:scale-110 transition duration-300">
-                                                                <i class="fa-brands fa-instagram text-sm"></i>
-                                                            </a>
-                                                        @endif
-                                                        @if ($anggota->mahasiswa->linkedin)
-                                                            <a href="{{ $anggota->mahasiswa->linkedin }}" target="_blank" 
-                                                               class="p-2 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full shadow hover:shadow-md transform hover:scale-110 transition duration-300">
-                                                                <i class="fa-brands fa-linkedin text-sm"></i>
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                </div>
+                    @if ($staffMembers->isNotEmpty())
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @foreach ($staffMembers as $anggota)
+                                <div class="group relative p-[1px] rounded-2xl bg-gradient-to-br from-white/10 to-white/5 hover:from-blue-500 hover:to-purple-500 transition-all duration-500">
+                                    <div class="relative h-full bg-[#0f172a] rounded-[0.9rem] p-5 flex items-center gap-5 overflow-hidden">
+                                        <!-- Hover Glow -->
+                                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500"></div>
+                                        
+                                        <div class="relative shrink-0">
+                                            <div class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-br from-white/20 to-transparent group-hover:from-blue-400 group-hover:to-purple-400 transition-all duration-500">
+                                                <img src="{{ asset('storage/' . $anggota->mahasiswa->foto) }}" 
+                                                     alt="{{ $anggota->mahasiswa->nama }}" 
+                                                     class="w-full h-full rounded-full object-cover border-2 border-[#0f172a]">
                                             </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
+                                        </div>
 
-                        {{-- Back Button --}}
-                        <div class="text-center">
-                            <a href="{{ route('departemen.index') }}" 
-                               class="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-700 to-cyan-600 text-white px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 font-semibold group">
-                                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform duration-300"></i>
-                                <span>Kembali ke Daftar Departemen</span>
-                            </a>
+                                        <div class="relative min-w-0 flex-1">
+                                            <h4 class="font-bold text-white text-base mb-1 truncate group-hover:text-blue-300 transition-colors">
+                                                {{ $anggota->mahasiswa->nama }}
+                                            </h4>
+                                            <p class="text-xs text-slate-500 mb-2">{{ $anggota->mahasiswa->nim }}</p>
+                                            <span class="inline-flex px-2 py-0.5 rounded text-[10px] font-medium bg-white/5 text-slate-300 border border-white/10 group-hover:border-blue-500/30 group-hover:text-blue-200 transition-colors">
+                                                {{ $anggota->jabatan }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    </div>
-                </div>
+                    @else
+                        <div class="p-8 rounded-2xl border border-dashed border-slate-700 bg-slate-800/30 text-center">
+                            <p class="text-slate-500 text-sm">Belum ada staff yang terdaftar di departemen ini.</p>
+                        </div>
+                    @endif
+                </section>
+
             </div>
 
-            <!-- Sidebar (Right - 1/4 width) -->
-            <div class="lg:col-span-1">
-                <div class="sticky top-8 space-y-8">
-
-                    <!-- Departemen Lainnya Section -->
-                    <div class="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
-                        <!-- Section Header -->
-                        <div class="bg-gradient-to-r from-blue-600 to-cyan-600 p-6">
-                            <h3 class="text-white font-bold text-lg flex items-center gap-2">
-                                <i class="fas fa-users text-cyan-300"></i>
-                                Departemen Lainnya
-                            </h3>
-                            <p class="text-blue-100 text-sm mt-1">Kenali juga departemen HIMAFORTIC lainnya</p>
-                        </div>
-
-                        <!-- Departemen List -->
-                        <div class="p-1 max-h-[600px] overflow-y-auto custom-scrollbar">
+            <!-- Sidebar -->
+            <div class="lg:col-span-4">
+                <div class="sticky top-24 space-y-6">
+                    
+                    <!-- Other Departments -->
+                    <div class="bg-[#0f172a]/80 backdrop-blur-xl rounded-3xl border border-white/10 p-6 shadow-xl">
+                        <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                            <i class="fas fa-sitemap text-cyan-400"></i>
+                            Departemen Lain
+                        </h3>
+                        
+                        <div class="space-y-3">
                             @php
                                 $departemenLainnya = \App\Models\Departemen::where('id', '!=', $departemen->id)
                                     ->inRandomOrder()
-                                    ->take(3)
+                                    ->take(5)
                                     ->get();
                             @endphp
 
-                            @forelse ($departemenLainnya as $dep)
-                                <a href="{{ route('departemen.show', $dep->id) }}" 
-                                   class="group block p-4 hover:bg-blue-50 rounded-xl transition-all duration-300 border-b border-slate-100 last:border-b-0">
-                                    <div class="flex gap-4">
-                                        <!-- Thumbnail -->
+                            @foreach ($departemenLainnya as $dep)
+                                <a href="{{ route('departemen.show', $dep->id) }}" class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all duration-300 group border border-transparent hover:border-white/5">
+                                    <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-cyan-400 group-hover:bg-cyan-500/10 transition-colors shrink-0">
                                         @if($dep->foto)
-                                            <div class="flex-shrink-0 relative">
-                                                <img src="{{ asset('storage/' . $dep->foto) }}"
-                                                     alt="{{ $dep->nama }}"
-                                                     class="w-16 h-16 rounded-xl object-cover shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
-                                            </div>
+                                            <img src="{{ asset('storage/' . $dep->foto) }}" class="w-full h-full object-cover rounded-xl">
                                         @else
-                                            <div class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center text-white shadow-md">
-                                                <i class="fas fa-building text-lg"></i>
-                                            </div>
+                                            <i class="fas fa-building text-xs"></i>
                                         @endif
-
-                                        <!-- Content -->
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="font-semibold text-slate-800 group-hover:text-blue-700 transition-colors line-clamp-2 leading-tight mb-1 text-sm">
-                                                {{ $dep->nama }}
-                                            </h4>
-                                            <p class="text-xs text-slate-500 line-clamp-2">
-                                                {{ Str::limit(strip_tags($dep->deskripsi), 60) }}
-                                            </p>
-                                        </div>
                                     </div>
+                                    <div class="min-w-0">
+                                        <h4 class="text-sm font-semibold text-slate-300 group-hover:text-white truncate transition-colors">
+                                            {{ $dep->nama }}
+                                        </h4>
+                                        <p class="text-xs text-slate-500 truncate">Lihat Detail</p>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-cyan-400 ml-auto transition-colors"></i>
                                 </a>
-                            @empty
-                                <div class="p-6 text-center text-slate-500">
-                                    <i class="fas fa-inbox text-3xl text-slate-300 mb-3"></i>
-                                    <p class="text-sm">Tidak ada departemen lainnya</p>
-                                </div>
-                            @endforelse
+                            @endforeach
                         </div>
 
-                        <!-- View All Button -->
-                        <div class="p-4 border-t border-slate-100">
-                            <a href="{{ route('departemen.index') }}" 
-                               class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-sm">
-                                <i class="fas fa-list"></i>
+                        <div class="mt-6 pt-4 border-t border-white/5">
+                            <a href="{{ route('departemen.index') }}" class="block w-full py-3 rounded-xl bg-white/5 hover:bg-blue-600 text-center text-sm font-bold text-slate-300 hover:text-white transition-all duration-300">
                                 Lihat Semua Departemen
                             </a>
                         </div>
                     </div>
 
-                    <!-- Quick Stats -->
-                    <div class="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl p-6 text-white shadow-xl">
-                        <h4 class="font-bold text-lg mb-4 flex items-center gap-2">
-                            <i class="fas fa-chart-bar"></i>
-                            Statistik
-                        </h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span class="text-blue-100 text-sm">Total Program</span>
-                                <span class="font-bold text-white">{{ $departemen->programKerja->count() }}</span>
+                    <!-- Stats Card -->
+                    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 to-cyan-600 p-6 text-white shadow-lg">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                        
+                        <h4 class="font-bold text-lg mb-6 relative z-10">Statistik Departemen</h4>
+                        
+                        <div class="grid grid-cols-2 gap-4 relative z-10">
+                            <div class="bg-black/20 rounded-2xl p-4 backdrop-blur-sm">
+                                <div class="text-3xl font-black mb-1">{{ $departemen->programKerja->count() }}</div>
+                                <div class="text-xs text-blue-100 opacity-80">Program Kerja</div>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-blue-100 text-sm">Total Anggota</span>
-                                <span class="font-bold text-white">{{ $departemen->anggota->count() }}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-blue-100 text-sm">Status</span>
-                                <span class="font-bold text-green-300 text-sm">Aktif</span>
+                            <div class="bg-black/20 rounded-2xl p-4 backdrop-blur-sm">
+                                <div class="text-3xl font-black mb-1">{{ $departemen->anggota->count() }}</div>
+                                <div class="text-xs text-blue-100 opacity-80">Total Anggota</div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+
         </div>
     </div>
-</section>
-
-<style>
-@keyframes pulse {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 0.4; }
-}
-.animate-pulse {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-.animation-delay-200 {
-    animation-delay: 0.2s;
-}
-.animation-delay-400 {
-    animation-delay: 0.4s;
-}
-.animation-delay-2000 {
-    animation-delay: 2s;
-}
-.animation-delay-4000 {
-    animation-delay: 4s;
-}
-
-/* Custom scrollbar for sidebar */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* Text justification */
-.text-justify {
-    text-align: justify;
-    text-justify: inter-word;
-    hyphens: auto;
-}
-
-/* Line clamp utilities */
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .lg\:col-span-3 {
-        grid-column: span 4 / span 4;
-    }
-    .lg\:col-span-1 {
-        grid-column: span 4 / span 4;
-    }
-}
-
-@media (max-width: 640px) {
-    .text-justify {
-        text-align: left;
-        text-justify: auto;
-    }
-}
-
-/* Smooth scrolling */
-html {
-    scroll-behavior: smooth;
-}
-</style>
+</div>
 @endsection
-
-
-
-

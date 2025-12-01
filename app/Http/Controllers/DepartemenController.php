@@ -26,12 +26,12 @@ class DepartemenController extends Controller
         return view('departemen.departemen', compact('periode', 'departemen'));
     }
 
-    public function show($id)
+    public function show($slug)
     {
         $departemen = Departemen::with([
             'ketua',
             'anggota.mahasiswa',
-        ])->findOrFail($id);
+        ])->where('slug', $slug)->firstOrFail();
 
         return view('departemen.show', compact('departemen'));
     }

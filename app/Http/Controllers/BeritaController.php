@@ -12,6 +12,7 @@ class BeritaController extends Controller
     public function index(Request $request)
     {
         $selectedKategoriSlug = $request->query('kategori');
+        $search = $request->query('search');
 
         // Ambil semua kategori (tanpa filter tanggal)
         $kategories = KategoriBerita::orderBy('nama')->get();
@@ -27,6 +28,12 @@ class BeritaController extends Controller
             });
         }
 
+        // Filter pencarian
+        if ($search) {
+            $beritaQuery->where('judul', 'ilike', '%' . $search . '%')
+                ->orWhere('konten', 'ilike', '%' . $search . '%');
+        }
+
         // Pagination 6 berita per halaman
         $semuaBerita = $beritaQuery->paginate(6)->withQueryString();
 
@@ -34,6 +41,7 @@ class BeritaController extends Controller
             'semuaBerita' => $semuaBerita,
             'kategories' => $kategories,
             'selectedKategori' => $selectedKategoriSlug,
+            'search' => $search,
         ]);
     }
 

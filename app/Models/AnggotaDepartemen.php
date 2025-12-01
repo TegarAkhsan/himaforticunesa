@@ -9,13 +9,20 @@ class AnggotaDepartemen extends Model
 {
     use HasFactory;
 
-    protected $table = 'anggota_departemen';
+    protected $table = 'pengurus_himpunan';
 
     protected $fillable = [
         'departemen_id',
         'mahasiswa_id',
         'jabatan',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope('departemen', function ($builder) {
+            $builder->whereNotNull('departemen_id');
+        });
+    }
 
     public function departemen()
     {

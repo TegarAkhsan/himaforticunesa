@@ -8,6 +8,10 @@ class HistoryController extends Controller
 {
     public function index()
     {
-       return view('history'); 
+        $periodes = \App\Models\Himafortic::with(['ketua', 'wakil'])
+            ->orderBy('tahun_periode', 'asc')
+            ->get();
+
+        return view('history', compact('periodes'));
     }
 }
