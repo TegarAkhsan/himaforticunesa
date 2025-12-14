@@ -35,3 +35,5 @@ Route::get('/advokasi', [AdvocacyController::class, 'index'])->name('advokasi.in
 Route::post('/advokasi', [AdvocacyController::class, 'store'])->name('advokasi.store');
 Route::post('/questions', [PublicQuestionController::class, 'store'])->name('questions.store');
 
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index']);
+

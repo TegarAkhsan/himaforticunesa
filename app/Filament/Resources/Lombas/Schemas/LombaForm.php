@@ -3,10 +3,13 @@
 namespace App\Filament\Resources\Lombas\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+
+use Filament\Forms\Components\FileUpload;
 
 class LombaForm
 {
@@ -20,13 +23,24 @@ class LombaForm
                     ->columnSpanFull(),
                 DatePicker::make('tanggal'),
                 TextInput::make('lokasi'),
-                TextInput::make('jenis')
+                Select::make('jenis')
+                    ->options([
+                        'Kompetisi' => 'Kompetisi',
+                        'Pelatihan' => 'Pelatihan',
+                    ])
                     ->required(),
-                TextInput::make('status')
+                Select::make('status')
+                    ->options([
+                        'Open' => 'Open',
+                        'Soon' => 'Soon',
+                        'Closed' => 'Closed',
+                    ])
                     ->required()
                     ->default('Open'),
                 TextInput::make('link_pendaftaran'),
-                TextInput::make('gambar'),
+                FileUpload::make('gambar')
+                    ->image()
+                    ->directory('lomba-images'),
                 Toggle::make('is_active')
                     ->required(),
             ]);

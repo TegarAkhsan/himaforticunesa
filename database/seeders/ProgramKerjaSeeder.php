@@ -24,7 +24,7 @@ class ProgramKerjaSeeder extends Seeder
                 $program = ProgramKerja::create([
                     'departemen_id' => $departemen->id,
                     'nama' => "Program Kerja {$i} - {$departemen->nama}",
-                    'deskripsi' => "<p>Ini adalah deskripsi untuk Program Kerja {$i} dari departemen {$departemen->nama}. Program ini bertujuan untuk meningkatkan kualitas mahasiswa di bidang terkait.</p>",
+                    'deskripsi' => "<p>Ini adalah deskripsi lengkap untuk Program Kerja {$i} dari departemen {$departemen->nama}. Program ini bertujuan untuk meningkatkan kualitas mahasiswa di bidang terkait melalui serangkaian kegiatan yang terstruktur dan berkelanjutan. Kami berkomitmen untuk menghadirkan narasumber yang kompeten dan materi yang relevan dengan perkembangan industri saat ini. Selain itu, program ini juga akan melibatkan sesi praktik langsung agar peserta dapat mengaplikasikan ilmu yang didapat. Diharapkan setelah mengikuti program ini, peserta memiliki kompetensi yang lebih baik dan siap bersaing di dunia kerja. Kami mengundang seluruh mahasiswa untuk berpartisipasi aktif dalam menyukseskan acara ini.</p>",
                     'tanggal_mulai' => Carbon::now()->addDays($i * 10),
                     'tanggal_selesai' => Carbon::now()->addDays($i * 10 + 5),
                 ]);

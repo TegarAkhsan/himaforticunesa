@@ -5,7 +5,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIMAFORTIC UNESA</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>@yield('title', 'HIMAFORTIC UNESA - Himpunan Mahasiswa Manajemen Informatika')</title>
+    <meta name="description" content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA. Wadah aspirasi, pengembangan potensi, dan inovasi mahasiswa Vokasi UNESA.')">
+    <meta name="keywords" content="HIMAFORTIC, UNESA, Manajemen Informatika, Organisasi Mahasiswa, Teknologi, Vokasi, Surabaya, Coding, Web Development">
+    <meta name="author" content="HIMAFORTIC Dev Team">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'HIMAFORTIC UNESA')">
+    <meta property="og:description" content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA.')">
+    <meta property="og:image" content="@yield('og_image', asset('assets/logo-himafortic.png'))">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('title', 'HIMAFORTIC UNESA')">
+    <meta property="twitter:description" content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA.')">
+    <meta property="twitter:image" content="@yield('og_image', asset('assets/logo-himafortic.png'))">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -367,7 +387,8 @@
                                     class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-all">
                                     <i class="fas fa-map-marker-alt"></i>
                                 </div>
-                                <span class="leading-relaxed">Gedung K10, Kampus Ketintang, Universitas Negeri Surabaya,
+                                <span class="leading-relaxed">Gedung K5 Ruang 09, Kampus Ketintang, Universitas Negeri
+                                    Surabaya,
                                     Jl. Ketintang, Surabaya, Jawa Timur</span>
                             </li>
                             <li class="flex items-center gap-3 text-slate-400 text-sm group">
@@ -376,7 +397,7 @@
                                     <i class="fab fa-whatsapp"></i>
                                 </div>
                                 <a href="https://wa.me/6281234648067" target="_blank"
-                                    class="hover:text-white transition-colors">0812-3464-8067 (Admin)</a>
+                                    class="hover:text-white transition-colors">0812-3135-5159 (Deplu)</a>
                             </li>
                         </ul>
                     </div>

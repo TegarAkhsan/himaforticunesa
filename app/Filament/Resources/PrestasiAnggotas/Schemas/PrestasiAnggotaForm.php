@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\PrestasiAnggotas\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -12,10 +14,16 @@ class PrestasiAnggotaForm
     {
         return $schema
             ->components([
-                TextInput::make('nama_mahasiswa')
+                TagsInput::make('nama_mahasiswa')
+                    ->separator(',')
+                    ->splitKeys(['Tab', ','])
                     ->required(),
                 TextInput::make('angkatan'),
-                TextInput::make('foto_mahasiswa'),
+                FileUpload::make('foto_mahasiswa')
+                    ->image()
+                    ->directory('prestasi_mahasiswa')
+                    ->label('foto')
+                    ->disk('public'),
                 TextInput::make('peringkat')
                     ->required(),
                 TextInput::make('judul_kompetisi')

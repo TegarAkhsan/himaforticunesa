@@ -27,6 +27,13 @@ class DepartemenForm
                 ->maxLength(255)
                 ->unique(ignoreRecord: true),
 
+            Select::make('himafortic_id')
+                ->label('Periode')
+                ->relationship('himafortic', 'tahun_periode')
+                ->searchable()
+                ->preload()
+                ->required(),
+
             RichEditor::make('deskripsi')
                 ->required()
                 ->columnSpanFull(),

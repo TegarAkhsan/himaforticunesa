@@ -17,7 +17,13 @@ class Departemen extends Model
         'deskripsi',
         'ketua_id',
         'foto',
+        'himafortic_id',
     ];
+
+    public function himafortic()
+    {
+        return $this->belongsTo(Himafortic::class, 'himafortic_id');
+    }
 
     protected static function boot()
     {

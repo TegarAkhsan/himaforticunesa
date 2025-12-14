@@ -13,14 +13,16 @@ class DepartemenController extends Controller
     {
 
         $periode = Himafortic::with(['ketua', 'wakil'])
-            ->latest('tahun_periode')
+            ->where('is_active', true)
             ->first();
 
 
         $departemen = Departemen::with([
             'ketua',
             'anggota.mahasiswa',
-        ])->get();
+        ])
+            ->where('himafortic_id', $periode?->id)
+            ->get();
 
 
         return view('departemen.departemen', compact('periode', 'departemen'));

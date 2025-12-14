@@ -14,10 +14,16 @@ class Himafortic extends Model
     protected $fillable = [
         'tahun_periode',
         'deskripsi',
-        'foto', 
+        'foto',
         'ketua_id',
         'wakil_id',
+        'is_active',
     ];
+
+    public function departemen()
+    {
+        return $this->hasMany(Departemen::class, 'himafortic_id');
+    }
 
     // Relasi ke Mahasiswa (Ketua)
     public function ketua()
@@ -29,5 +35,11 @@ class Himafortic extends Model
     public function wakil()
     {
         return $this->belongsTo(Mahasiswa::class, 'wakil_id');
+    }
+
+    // Relasi ke Gallery
+    public function galleries()
+    {
+        return $this->hasMany(HimaforticGallery::class, 'himafortic_id');
     }
 }

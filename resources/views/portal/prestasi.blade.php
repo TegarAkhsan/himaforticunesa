@@ -106,45 +106,64 @@
                     @forelse($prestasiAnggota as $anggota)
                         <!-- Member Achievement -->
                         <div
-                            class="group bg-[#0f172a]/60 backdrop-blur-md border border-white/5 rounded-2xl p-6 hover:bg-[#1e293b] hover:border-amber-500/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,158,11,0.1)]">
-                            <div class="flex items-center justify-between mb-6">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-14 h-14 rounded-full bg-slate-700 p-0.5 border-2 border-amber-500/30 group-hover:border-amber-500 transition-colors overflow-hidden">
-                                        @if($anggota->foto_mahasiswa)
-                                            <img src="{{ asset('storage/' . $anggota->foto_mahasiswa) }}"
-                                                alt="{{ $anggota->nama_mahasiswa }}"
-                                                class="w-full h-full object-cover rounded-full">
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($anggota->nama_mahasiswa) }}&background=0D8ABC&color=fff"
-                                                alt="{{ $anggota->nama_mahasiswa }}"
-                                                class="w-full h-full object-cover rounded-full">
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-white text-lg group-hover:text-amber-400 transition-colors">
-                                            {{ $anggota->nama_mahasiswa }}
-                                        </h4>
-                                        <p class="text-xs text-slate-400">{{ $anggota->angkatan }}</p>
-                                    </div>
+                            class="group bg-[#0f172a]/60 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden hover:bg-[#1e293b] hover:border-amber-500/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(245,158,11,0.1)] flex flex-col h-full">
+
+                            <!-- Image Section -->
+                            <div class="h-40 w-full overflow-hidden relative">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent z-10 opacity-60">
                                 </div>
-                                <div
-                                    class="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/20 group-hover:bg-amber-500 group-hover:text-white transition-all">
-                                    <i class="fas fa-medal"></i>
-                                </div>
+                                @if($anggota->foto_mahasiswa)
+                                    <img src="{{ asset('storage/' . $anggota->foto_mahasiswa) }}"
+                                        alt="{{ $anggota->judul_kompetisi }}"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full bg-slate-800 flex items-center justify-center">
+                                        <i class="fas fa-trophy text-4xl text-slate-600"></i>
+                                    </div>
+                                @endif
                             </div>
 
-                            <div class="space-y-3">
-                                <div>
+                            <!-- Content Section -->
+                            <div class="p-5 flex-1 flex flex-col">
+                                <h3
+                                    class="text-lg font-bold text-white leading-tight mb-3 group-hover:text-amber-400 transition-colors">
+                                    {{ $anggota->judul_kompetisi }}
+                                </h3>
+
+                                <div class="mb-4 space-y-2">
+                                    <!-- Rank -->
                                     <span
-                                        class="inline-block px-3 py-1 bg-amber-500/10 text-amber-400 text-xs font-bold rounded-lg border border-amber-500/20 mb-2">{{ $anggota->peringkat }}</span>
-                                    <h3 class="text-xl font-bold text-slate-100 leading-tight group-hover:text-white">
-                                        {{ $anggota->judul_kompetisi }}
-                                    </h3>
+                                        class="inline-block px-2.5 py-0.5 bg-amber-500/10 text-amber-400 text-xs font-bold rounded border border-amber-500/20">
+                                        {{ $anggota->peringkat }}
+                                    </span>
+
+                                    <!-- Organizer -->
+                                    <div class="flex items-center gap-2 text-xs text-slate-400">
+                                        <i class="fas fa-university text-slate-500"></i>
+                                        <span>{{ $anggota->penyelenggara }}</span>
+                                    </div>
                                 </div>
-                                <div class="flex items-center gap-2 text-sm text-slate-400 border-t border-white/5 pt-3">
-                                    <i class="fas fa-university text-slate-500"></i>
-                                    <span>{{ $anggota->penyelenggara }}</span>
+
+                                <div class="mt-auto pt-3 border-t border-white/5">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tim Mahasiswa
+                                        </h4>
+                                        <span
+                                            class="text-[10px] font-medium text-slate-600 bg-slate-800 px-2 py-0.5 rounded-full">
+                                            {{ $anggota->angkatan }}
+                                        </span>
+                                    </div>
+
+                                    <ul class="list-disc list-outside pl-4 space-y-1">
+                                        @php
+                                            $names = explode(',', $anggota->nama_mahasiswa);
+                                        @endphp
+                                        @foreach($names as $name)
+                                            <li class="text-sm text-slate-300 leading-snug">
+                                                {{ trim($name) }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
                         </div>

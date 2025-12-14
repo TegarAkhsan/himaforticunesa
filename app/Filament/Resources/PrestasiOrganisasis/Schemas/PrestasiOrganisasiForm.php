@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PrestasiOrganisasis\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
@@ -20,7 +21,9 @@ class PrestasiOrganisasiForm
                 DatePicker::make('tanggal'),
                 TextInput::make('peringkat'),
                 TextInput::make('tingkat'),
-                TextInput::make('gambar'),
+                FileUpload::make('gambar')
+                    ->image()
+                    ->directory('prestasi_organisasi'),
             ]);
     }
 }
