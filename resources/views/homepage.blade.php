@@ -432,7 +432,7 @@
               </div>
               <h4 class="text-xl font-bold text-slate-900 mb-2">{{ $dept->nama }}</h4>
               <p class="text-slate-500 text-sm line-clamp-3 mb-4">
-                {{ $dept->deskripsi ?? 'Deskripsi departemen belum tersedia.' }}
+                {{ strip_tags($dept->deskripsi ?? 'Deskripsi departemen belum tersedia.') }}
               </p>
               <a href="{{ url('departemen/' . $dept->slug) }}"
                 class="inline-flex items-center text-blue-600 font-semibold text-sm hover:text-blue-700">
