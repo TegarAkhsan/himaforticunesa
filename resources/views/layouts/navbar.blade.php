@@ -5,11 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- SEO Meta Tags -->
     <title>@yield('title', 'HIMAFORTIC UNESA - Himpunan Mahasiswa Manajemen Informatika')</title>
-    <meta name="description" content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA. Wadah aspirasi, pengembangan potensi, dan inovasi mahasiswa Vokasi UNESA.')">
-    <meta name="keywords" content="HIMAFORTIC, UNESA, Manajemen Informatika, Organisasi Mahasiswa, Teknologi, Vokasi, Surabaya, Coding, Web Development">
+    <meta name="description"
+        content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA. Wadah aspirasi, pengembangan potensi, dan inovasi mahasiswa Vokasi UNESA.')">
+    <meta name="keywords"
+        content="HIMAFORTIC, UNESA, Manajemen Informatika, Organisasi Mahasiswa, Teknologi, Vokasi, Surabaya, Coding, Web Development">
     <meta name="author" content="HIMAFORTIC Dev Team">
     <meta name="robots" content="index, follow">
 
@@ -17,14 +19,16 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="@yield('title', 'HIMAFORTIC UNESA')">
-    <meta property="og:description" content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA.')">
+    <meta property="og:description"
+        content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA.')">
     <meta property="og:image" content="@yield('og_image', asset('assets/logo-himafortic.png'))">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="@yield('title', 'HIMAFORTIC UNESA')">
-    <meta property="twitter:description" content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA.')">
+    <meta property="twitter:description"
+        content="@yield('description', 'Website resmi Himpunan Mahasiswa Manajemen Informatika (HIMAFORTIC) UNESA.')">
     <meta property="twitter:image" content="@yield('og_image', asset('assets/logo-himafortic.png'))">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -417,6 +421,78 @@
             </div>
         </footer>
     </main>
+
+    <!-- Global Audio Player (Floating Widget) -->
+    <div x-data="audioPlayer()" x-init="init()" class="fixed bottom-8 left-8 z-50 print:hidden">
+        <audio x-ref="audio" loop>
+            <source src="{{ asset('assets/music.mp3') }}" type="audio/mp3">
+        </audio>
+
+        <button @click="toggle()"
+            class="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/20 backdrop-blur-md group hover:scale-110 active:scale-95"
+            :class="isPlaying ? 'bg-violet-600/90 text-white shadow-violet-500/40 ring-4 ring-violet-500/20' : 'bg-white/80 text-slate-600 hover:text-violet-600 hover:bg-white'">
+
+            <div class="relative flex items-center justify-center w-full h-full">
+                <!-- Icon -->
+                <i class="fas text-xl transition-all duration-300" :class="isPlaying ? 'fa-pause' : 'fa-music'"></i>
+
+                <!-- Ripple Effect when playing -->
+                <div x-show="isPlaying"
+                    class="absolute inset-0 rounded-full border-2 border-white/30 animate-ping opacity-75"></div>
+            </div>
+
+            <!-- Tooltip -->
+            <span
+                class="absolute left-full ml-4 px-3 py-1 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                <span x-text="isPlaying ? 'Pause Music' : 'Play Music'"></span>
+            </span>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('audioPlayer', () => ({
+                isPlaying: false,
+
+                init() {
+                    const audio = this.$refs.audio;
+                    audio.volume = 0.5; // Set default volume
+
+                    // Check local storage
+                    const savedState = localStorage.getItem('musicPlaying');
+
+                    if (savedState === 'true') {
+                        // Attempt to autoplay if previously playing
+                        // Note: Browsers may block unrelated autoplay, but we try
+                        const playPromise = audio.play();
+
+                        if (playPromise !== undefined) {
+                            playPromise.then(_ => {
+                                this.isPlaying = true;
+                            }).catch(error => {
+                                console.log('Autoplay prevented by browser policy');
+                                this.isPlaying = false;
+                                localStorage.setItem('musicPlaying', 'false');
+                            });
+                        }
+                    }
+                },
+
+                toggle() {
+                    const audio = this.$refs.audio;
+                    if (this.isPlaying) {
+                        audio.pause();
+                        this.isPlaying = false;
+                        localStorage.setItem('musicPlaying', 'false');
+                    } else {
+                        audio.play();
+                        this.isPlaying = true;
+                        localStorage.setItem('musicPlaying', 'true');
+                    }
+                }
+            }))
+        });
+    </script>
 
 </body>
 

@@ -98,82 +98,82 @@
     </style>
 
     <div class="min-h-screen relative overflow-hidden" x-data="{
-                                                                                    selectedYear: '{{ $periodes->first()?->tahun_periode ?? date('Y') }}',
-                                                                                    periodes: {{ $periodes->toJson() }},
-                                                                                    get currentPeriode() {
-                                                                                        return this.periodes.find(p => p.tahun_periode == this.selectedYear) || null;
-                                                                                    },
-                                                                                    get gallery() {
-                                                                                        const p = this.currentPeriode;
-                                                                                        if (!p) return [];
+                                                                                        selectedYear: '{{ $periodes->first()?->tahun_periode ?? date('Y') }}',
+                                                                                        periodes: {{ $periodes->toJson() }},
+                                                                                        get currentPeriode() {
+                                                                                            return this.periodes.find(p => p.tahun_periode == this.selectedYear) || null;
+                                                                                        },
+                                                                                        get gallery() {
+                                                                                            const p = this.currentPeriode;
+                                                                                            if (!p) return [];
 
-                                                                                        let allPhotos = [];
+                                                                                            let allPhotos = [];
 
-                                                                                        // 1. Uploaded Gallery
-                                                                                        if (p.galleries && p.galleries.length > 0) {
-                                                                                            allPhotos.push(...p.galleries.map(g => ({ path: g.image_path, caption: g.caption })));
-                                                                                        }
+                                                                                            // 1. Uploaded Gallery
+                                                                                            if (p.galleries && p.galleries.length > 0) {
+                                                                                                allPhotos.push(...p.galleries.map(g => ({ path: g.image_path, caption: g.caption })));
+                                                                                            }
 
-                                                                                        // 2. Program Kerja Photos (Legacy)
-                                                                                        if (p.departemen) {
-                                                                                            p.departemen.forEach(dep => {
-                                                                                                if (dep.program_kerja) {
-                                                                                                    dep.program_kerja.forEach(proker => {
-                                                                                                        if (proker.foto_program) {
-                                                                                                            proker.foto_program.forEach(fp => {
-                                                                                                                if (fp.foto1) allPhotos.push({ path: fp.foto1, caption: proker.nama });
-                                                                                                                if (fp.foto2) allPhotos.push({ path: fp.foto2, caption: proker.nama });
-                                                                                                                if (fp.foto3) allPhotos.push({ path: fp.foto3, caption: proker.nama });
-                                                                                                            });
-                                                                                                        }
-                                                                                                    });
-                                                                                                }
-                                                                                            });
-                                                                                        }
+                                                                                            // 2. Program Kerja Photos (Legacy)
+                                                                                            if (p.departemen) {
+                                                                                                p.departemen.forEach(dep => {
+                                                                                                    if (dep.program_kerja) {
+                                                                                                        dep.program_kerja.forEach(proker => {
+                                                                                                            if (proker.foto_program) {
+                                                                                                                proker.foto_program.forEach(fp => {
+                                                                                                                    if (fp.foto1) allPhotos.push({ path: fp.foto1, caption: proker.nama });
+                                                                                                                    if (fp.foto2) allPhotos.push({ path: fp.foto2, caption: proker.nama });
+                                                                                                                    if (fp.foto3) allPhotos.push({ path: fp.foto3, caption: proker.nama });
+                                                                                                                });
+                                                                                                            }
+                                                                                                        });
+                                                                                                    }
+                                                                                                });
+                                                                                            }
 
-                                                                                        // Shuffle
-                                                                                        return allPhotos.sort(() => 0.5 - Math.random());
-                                                                                    },
-                                                                            get staff1() {
-                                                                                const all = this.staff;
-                                                                                const mid = Math.ceil(all.length / 2);
-                                                                                return all.slice(0, mid);
-                                                                            },
-                                                                            get staff2() {
-                                                                                const all = this.staff;
-                                                                                const mid = Math.ceil(all.length / 2);
-                                                                                return all.slice(mid);
-                                                                            },
-                                                                            get staff() {
-                                                                                const p = this.currentPeriode;
-                                                                                if (!p) return [];
-                                                                                let members = [];
+                                                                                            // Shuffle
+                                                                                            return allPhotos.sort(() => 0.5 - Math.random());
+                                                                                        },
+                                                                                get staff1() {
+                                                                                    const all = this.staff;
+                                                                                    const mid = Math.ceil(all.length / 2);
+                                                                                    return all.slice(0, mid);
+                                                                                },
+                                                                                get staff2() {
+                                                                                    const all = this.staff;
+                                                                                    const mid = Math.ceil(all.length / 2);
+                                                                                    return all.slice(mid);
+                                                                                },
+                                                                                get staff() {
+                                                                                    const p = this.currentPeriode;
+                                                                                    if (!p) return [];
+                                                                                    let members = [];
 
-                                                                                // 1. Add Leaders
-                                                                                if (p.ketua) members.push({ name: p.ketua.nama, photo: p.ketua.foto, position: 'Ketua Himpunan', nim: p.ketua.nim });
-                                                                                if (p.wakil) members.push({ name: p.wakil.nama, photo: p.wakil.foto, position: 'Wakil Ketua', nim: p.wakil.nim });
+                                                                                    // 1. Add Leaders
+                                                                                    if (p.ketua) members.push({ name: p.ketua.nama, photo: p.ketua.foto, position: 'Ketua Himpunan', nim: p.ketua.nim });
+                                                                                    if (p.wakil) members.push({ name: p.wakil.nama, photo: p.wakil.foto, position: 'Wakil Ketua', nim: p.wakil.nim });
 
-                                                                                // 2. Add Department Members
-                                                                                if (p.departemen && p.departemen.length > 0) {
-                                                                                    p.departemen.forEach(dep => {
-                                                                                        if (dep.anggota && dep.anggota.length > 0) {
-                                                                                            dep.anggota.forEach(ang => {
-                                                                                                if(ang.mahasiswa) {
-                                                                                                    members.push({
-                                                                                                        name: ang.mahasiswa.nama,
-                                                                                                        photo: ang.mahasiswa.foto,
-                                                                                                        position: ang.jabatan || 'Anggota ' + dep.nama,
-                                                                                                        nim: ang.mahasiswa.nim
-                                                                                                    });
-                                                                                                }
-                                                                                            });
-                                                                                        }
-                                                                                    });
+                                                                                    // 2. Add Department Members
+                                                                                    if (p.departemen && p.departemen.length > 0) {
+                                                                                        p.departemen.forEach(dep => {
+                                                                                            if (dep.anggota && dep.anggota.length > 0) {
+                                                                                                dep.anggota.forEach(ang => {
+                                                                                                    if(ang.mahasiswa) {
+                                                                                                        members.push({
+                                                                                                            name: ang.mahasiswa.nama,
+                                                                                                            photo: ang.mahasiswa.foto,
+                                                                                                            position: ang.jabatan || 'Anggota ' + dep.nama,
+                                                                                                            nim: ang.mahasiswa.nim
+                                                                                                        });
+                                                                                                    }
+                                                                                                });
+                                                                                            }
+                                                                                        });
+                                                                                    }
+
+                                                                                    return members;
                                                                                 }
-
-                                                                                return members;
-                                                                            }
-                                                                                }">
+                                                                                    }">
 
         <!-- Background Grid & Glow (Fixed to cover entire screen including behind navbar) -->
         <div class="fixed inset-0 z-0 pointer-events-none">
@@ -317,266 +317,276 @@
                             <!-- Abstract Background Elements & Strong Glow -->
                             <div class="absolute inset-0 z-0">
                                 <!-- Strong Central Glow -->
+                                <!-- Right Column: Vertical Stacked Cards (Visuals) -->
                                 <div
-                                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-violet-600/40 rounded-full blur-[120px] animate-pulse mix-blend-screen">
-                                </div>
-                                <div
-                                    class="absolute top-1/4 right-0 w-[200px] h-[200px] bg-blue-500/30 rounded-full blur-[90px]">
-                                </div>
-                                <!-- Dotted pattern -->
-                                <div
-                                    class="absolute inset-0 bg-[radial-gradient(#ffffff1a_1px,transparent_1px)] [background-size:20px_20px] opacity-20">
-                                </div>
-                            </div>
+                                    class="w-full lg:w-7/12 order-1 lg:order-2 relative min-h-[600px] flex flex-col items-center justify-center gap-8">
 
-                            <!-- Connecting Line (Curved SVG) - visible on MD+ -->
-                            <svg class="hidden md:block absolute inset-0 w-full h-full pointer-events-none z-0 opacity-60"
-                                viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M100 150 C 200 150, 250 300, 350 450" stroke="url(#lineGrad)" stroke-width="2"
-                                    stroke-dasharray="10 10" />
-                                <defs>
-                                    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#8b5cf6" />
-                                        <stop offset="100%" stop-color="#3b82f6" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-
-                            <!-- Ketua Card (Top Left - Floating) -->
-                            <div
-                                class="absolute top-4 md:top-10 left-0 md:left-10 lg:left-20 z-20 hover:z-30 transition-all duration-500 hover:scale-105 group perspective">
-                                <template x-if="currentPeriode.ketua">
-                                    <div
-                                        class="relative w-56 md:w-72 bg-slate-900/80 backdrop-blur-xl rounded-3xl p-4 border border-violet-500/30 shadow-[0_0_50px_rgba(139,92,246,0.2)] transform rotate-[-3deg] hover:rotate-0 transition-all duration-500">
-                                        <!-- Glow behind card -->
-                                        <div class="absolute inset-0 bg-violet-600/20 blur-2xl -z-10 rounded-3xl"></div>
-
-                                        <!-- Photo (Full Color) -->
+                                    <!-- Abstract Background Elements & Strong Glow -->
+                                    <div class="absolute inset-0 z-0 pointer-events-none">
+                                        <!-- Strong Central Glow -->
                                         <div
-                                            class="aspect-[4/5] w-full rounded-2xl overflow-hidden mb-4 bg-slate-800 relative shadow-inner">
-                                            <img :src="currentPeriode.ketua.foto ? '/storage/' + currentPeriode.ketua.foto : 'https://ui-avatars.com/api/?name=' + currentPeriode.ketua.nama"
-                                                class="w-full h-full object-cover transition-all duration-500">
-                                            <div
-                                                class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-slate-900 to-transparent">
-                                            </div>
-                                            <div class="absolute bottom-3 left-3">
-                                                <span
-                                                    class="px-2 py-1 bg-violet-600/90 text-white text-[10px] font-bold uppercase rounded-md tracking-wider shadow-lg border border-violet-400/20">Ketua</span>
-                                            </div>
+                                            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-violet-600/30 rounded-full blur-[100px] animate-pulse mix-blend-screen">
                                         </div>
-                                        <!-- Name -->
-                                        <h3 class="text-white font-bold text-base md:text-lg leading-tight mb-1"
-                                            x-text="currentPeriode.ketua.nama"></h3>
-                                        <p class="text-violet-300 text-[10px] md:text-xs font-mono"
-                                            x-text="currentPeriode.ketua.nim"></p>
-
-                                        <!-- Decorative Badge -->
                                         <div
-                                            class="absolute -top-4 -right-4 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-violet-500 to-fuchsia-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg border-4 border-[#0b1121]">
-                                            <i class="fas fa-crown"></i>
+                                            class="absolute top-0 right-0 w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-blue-500/20 rounded-full blur-[80px]">
+                                        </div>
+                                        <!-- Dotted pattern -->
+                                        <div
+                                            class="absolute inset-0 bg-[radial-gradient(#ffffff1a_1px,transparent_1px)] [background-size:20px_20px] opacity-20">
                                         </div>
                                     </div>
-                                </template>
-                            </div>
 
-                            <!-- Wakil Card (Bottom Right - Floating) -->
-                            <div
-                                class="absolute bottom-4 md:bottom-10 right-0 md:right-4 lg:right-10 z-10 hover:z-30 transition-all duration-500 hover:scale-105 group perspective">
-                                <template x-if="currentPeriode.wakil">
-                                    <div
-                                        class="relative w-56 md:w-72 bg-slate-900/80 backdrop-blur-xl rounded-3xl p-4 border border-blue-500/30 shadow-[0_0_50px_rgba(59,130,246,0.2)] transform rotate-[3deg] hover:rotate-0 transition-all duration-500">
-                                        <!-- Glow behind card -->
-                                        <div class="absolute inset-0 bg-blue-600/20 blur-2xl -z-10 rounded-3xl"></div>
-
-                                        <!-- Photo (Full Color) -->
-                                        <div
-                                            class="aspect-[4/5] w-full rounded-2xl overflow-hidden mb-4 bg-slate-800 relative shadow-inner">
-                                            <img :src="currentPeriode.wakil.foto ? '/storage/' + currentPeriode.wakil.foto : 'https://ui-avatars.com/api/?name=' + currentPeriode.wakil.nama"
-                                                class="w-full h-full object-cover transition-all duration-500">
+                                    <!-- Ketua Card (Top) -->
+                                    <div class="relative z-20 hover:z-30 transition-all duration-500 hover:scale-105 group perspective w-64 md:w-72 self-center lg:self-start lg:translate-x-20"
+                                        x-data x-intersect="$el.classList.add('opacity-100', 'translate-y-0')"
+                                        class="opacity-0 translate-y-10 transition-all duration-700 delay-100 ease-out">
+                                        <template x-if="currentPeriode.ketua">
                                             <div
-                                                class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-slate-900 to-transparent">
-                                            </div>
-                                            <div class="absolute bottom-3 left-3">
-                                                <span
-                                                    class="px-2 py-1 bg-blue-600/90 text-white text-[10px] font-bold uppercase rounded-md tracking-wider shadow-lg border border-blue-400/20">Wakil</span>
-                                            </div>
-                                        </div>
-                                        <!-- Name -->
-                                        <h3 class="text-white font-bold text-base md:text-lg leading-tight mb-1"
-                                            x-text="currentPeriode.wakil.nama"></h3>
-                                        <p class="text-blue-300 text-[10px] md:text-xs font-mono"
-                                            x-text="currentPeriode.wakil.nim"></p>
-                                    </div>
-                                </template>
-                            </div>
+                                                class="relative bg-slate-900/80 backdrop-blur-xl rounded-3xl p-4 border border-violet-500/30 shadow-[0_0_50px_rgba(139,92,246,0.2)] transform -rotate-2 hover:rotate-0 transition-all duration-500">
+                                                <!-- Glow behind card -->
+                                                <div class="absolute inset-0 bg-violet-600/20 blur-2xl -z-10 rounded-3xl">
+                                                </div>
 
+                                                <!-- Photo -->
+                                                <div
+                                                    class="aspect-[4/5] w-full rounded-2xl overflow-hidden mb-4 bg-slate-800 relative shadow-inner">
+                                                    <img :src="currentPeriode.ketua.foto ? '/storage/' + currentPeriode.ketua.foto : 'https://ui-avatars.com/api/?name=' + currentPeriode.ketua.nama"
+                                                        class="w-full h-full object-cover transition-all duration-500">
+                                                    <div
+                                                        class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-slate-900 to-transparent">
+                                                    </div>
+                                                    <div class="absolute bottom-3 left-3">
+                                                        <span
+                                                            class="px-2 py-1 bg-violet-600/90 text-white text-[10px] font-bold uppercase rounded-md tracking-wider shadow-lg border border-violet-400/20">Ketua</span>
+                                                    </div>
+                                                </div>
+                                                <!-- Name -->
+                                                <h3 class="text-white font-bold text-lg leading-tight mb-1"
+                                                    x-text="currentPeriode.ketua.nama"></h3>
+                                                <p class="text-violet-300 text-xs font-mono"
+                                                    x-text="currentPeriode.ketua.nim"></p>
+
+                                                <!-- Decorative Badge -->
+                                                <div
+                                                    class="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-violet-500 to-fuchsia-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg border-4 border-[#0b1121]">
+                                                    <i class="fas fa-crown"></i>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                    <!-- Wakil Card (Bottom) -->
+                                    <div class="relative z-10 hover:z-30 transition-all duration-500 hover:scale-105 group perspective w-64 md:w-72 self-center lg:self-end lg:-translate-x-10 -mt-10 lg:-mt-20"
+                                        x-data x-intersect="$el.classList.add('opacity-100', 'translate-y-0')"
+                                        class="opacity-0 translate-y-10 transition-all duration-700 delay-300 ease-out">
+                                        <template x-if="currentPeriode.wakil">
+                                            <div
+                                                class="relative bg-slate-900/80 backdrop-blur-xl rounded-3xl p-4 border border-blue-500/30 shadow-[0_0_50px_rgba(59,130,246,0.2)] transform rotate-2 hover:rotate-0 transition-all duration-500">
+                                                <!-- Glow behind card -->
+                                                <div class="absolute inset-0 bg-blue-600/20 blur-2xl -z-10 rounded-3xl">
+                                                </div>
+
+                                                <!-- Photo -->
+                                                <div
+                                                    class="aspect-[4/5] w-full rounded-2xl overflow-hidden mb-4 bg-slate-800 relative shadow-inner">
+                                                    <img :src="currentPeriode.wakil.foto ? '/storage/' + currentPeriode.wakil.foto : 'https://ui-avatars.com/api/?name=' + currentPeriode.wakil.nama"
+                                                        class="w-full h-full object-cover transition-all duration-500">
+                                                    <div
+                                                        class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-slate-900 to-transparent">
+                                                    </div>
+                                                    <div class="absolute bottom-3 left-3">
+                                                        <span
+                                                            class="px-2 py-1 bg-blue-600/90 text-white text-[10px] font-bold uppercase rounded-md tracking-wider shadow-lg border border-blue-400/20">Wakil</span>
+                                                    </div>
+                                                </div>
+                                                <!-- Name -->
+                                                <h3 class="text-white font-bold text-lg leading-tight mb-1"
+                                                    x-text="currentPeriode.wakil.nama"></h3>
+                                                <p class="text-blue-300 text-xs font-mono"
+                                                    x-text="currentPeriode.wakil.nim"></p>
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                </div>
+                                class="px-2 py-1 bg-blue-600/90 text-white text-[10px] font-bold uppercase rounded-md
+                                tracking-wider shadow-lg border border-blue-400/20">Wakil</span>
+                            </div>
                         </div>
-                    </div>
-                </template>
-
-                <!-- Empty State -->
-                <template x-if="!currentPeriode">
-                    <div class="flex flex-col items-center justify-center h-[500px] text-center">
-                        <div class="text-6xl text-slate-700 mb-4"><i class="fas fa-ghost"></i></div>
-                        <h2 class="text-3xl font-bold text-slate-500">Pilih Tahun Periode</h2>
-                        <p class="text-slate-600">Silakan pilih tahun di timeline untuk melihat sejarah.</p>
+                        <!-- Name -->
+                        <h3 class="text-white font-bold text-base md:text-lg leading-tight mb-1"
+                            x-text="currentPeriode.wakil.nama"></h3>
+                        <p class="text-blue-300 text-[10px] md:text-xs font-mono" x-text="currentPeriode.wakil.nim"></p>
                     </div>
                 </template>
             </div>
+
         </div>
+    </div>
+    </template>
 
-        <!-- ================= TEAM SECTION ================= -->
-        <div class="relative z-10 py-24 border-t border-white/5 bg-[#020617]">
-            <template x-if="currentPeriode">
-                <div class="max-w-7xl mx-auto px-4" x-data="{ shown: false }"
-                    x-init="new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){shown=true;o.disconnect()}}).observe($el)">
+    <!-- Empty State -->
+    <template x-if="!currentPeriode">
+        <div class="flex flex-col items-center justify-center h-[500px] text-center">
+            <div class="text-6xl text-slate-700 mb-4"><i class="fas fa-ghost"></i></div>
+            <h2 class="text-3xl font-bold text-slate-500">Pilih Tahun Periode</h2>
+            <p class="text-slate-600">Silakan pilih tahun di timeline untuk melihat sejarah.</p>
+        </div>
+    </template>
+    </div>
+    </div>
 
-                    <div class="flex flex-col md:flex-row justify-between items-end mb-12"
-                        :class="shown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
-                        class="transition-all duration-1000 ease-out">
-                        <div>
-                            <h2 class="text-4xl font-bold font-outfit text-white mb-2">Fungsionaris</h2>
-                            <p class="text-slate-400">The dedicated team behind the vision.</p>
-                        </div>
-                        <div class="h-1 w-32 bg-gradient-to-r from-blue-500 to-transparent mt-4 md:mt-0"></div>
+    <!-- ================= TEAM SECTION ================= -->
+    <div class="relative z-10 py-24 border-t border-white/5 bg-[#020617]">
+        <template x-if="currentPeriode">
+            <div class="max-w-7xl mx-auto px-4" x-data="{ shown: false }"
+                x-init="new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){shown=true;o.disconnect()}}).observe($el)">
+
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12"
+                    :class="shown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+                    class="transition-all duration-1000 ease-out">
+                    <div>
+                        <h2 class="text-4xl font-bold font-outfit text-white mb-2">Fungsionaris</h2>
+                        <p class="text-slate-400">The dedicated team behind the vision.</p>
+                    </div>
+                    <div class="h-1 w-32 bg-gradient-to-r from-blue-500 to-transparent mt-4 md:mt-0"></div>
+                </div>
+
+                <!-- Marquee / Carousel Section -->
+                <div class="relative w-full overflow-hidden marquee-mask" x-show="staff.length > 0">
+
+                    <!-- Row 1: Scroll Left (First Half) -->
+                    <div class="flex gap-4 mb-4 animate-scroll-left w-max hover:[animation-play-state:paused] group/marquee"
+                        x-show="staff1.length > 0">
+                        <template x-for="i in 2">
+                            <div class="flex gap-4">
+                                <template x-for="(member, index) in staff1" :key="'staff1-' + index">
+                                    <div
+                                        class="relative w-72 h-24 bg-slate-800/50 border border-white/5 rounded-2xl flex items-center p-3 gap-4 hover:bg-slate-800 transition-colors group/card shrink-0">
+                                        <div
+                                            class="w-16 h-16 rounded-xl overflow-hidden border border-white/10 group-hover/card:border-blue-500 transition-colors shrink-0">
+                                            <img :src="member.photo ? '/storage/' + member.photo : 'https://ui-avatars.com/api/?name=' + member.name + '&background=random'"
+                                                class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="overflow-hidden">
+                                            <h4 class="text-white font-bold text-sm truncate" x-text="member.name"></h4>
+                                            <p class="text-slate-400 text-xs truncate" x-text="member.position"></p>
+                                            <p class="text-slate-600 text-[10px] truncate mt-1" x-text="member.nim"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
                     </div>
 
-                    <!-- Marquee / Carousel Section -->
-                    <div class="relative w-full overflow-hidden marquee-mask" x-show="staff.length > 0">
-
-                        <!-- Row 1: Scroll Left (First Half) -->
-                        <div class="flex gap-4 mb-4 animate-scroll-left w-max hover:[animation-play-state:paused] group/marquee"
-                            x-show="staff1.length > 0">
-                            <template x-for="i in 2">
-                                <div class="flex gap-4">
-                                    <template x-for="(member, index) in staff1" :key="'staff1-' + index">
+                    <!-- Row 2: Scroll Right (Second Half) -->
+                    <div class="flex gap-4 animate-scroll-right w-max hover:[animation-play-state:paused] group/marquee"
+                        x-show="staff2.length > 0">
+                        <template x-for="i in 2">
+                            <div class="flex gap-4">
+                                <template x-for="(member, index) in staff2" :key="'staff2-' + index">
+                                    <div
+                                        class="relative w-72 h-24 bg-slate-800/50 border border-white/5 rounded-2xl flex items-center p-3 gap-4 hover:bg-slate-800 transition-colors group/card shrink-0">
                                         <div
-                                            class="relative w-72 h-24 bg-slate-800/50 border border-white/5 rounded-2xl flex items-center p-3 gap-4 hover:bg-slate-800 transition-colors group/card shrink-0">
-                                            <div
-                                                class="w-16 h-16 rounded-xl overflow-hidden border border-white/10 group-hover/card:border-blue-500 transition-colors shrink-0">
-                                                <img :src="member.photo ? '/storage/' + member.photo : 'https://ui-avatars.com/api/?name=' + member.name + '&background=random'"
-                                                    class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-white font-bold text-sm truncate" x-text="member.name"></h4>
-                                                <p class="text-slate-400 text-xs truncate" x-text="member.position"></p>
-                                                <p class="text-slate-600 text-[10px] truncate mt-1" x-text="member.nim"></p>
-                                            </div>
+                                            class="w-16 h-16 rounded-xl overflow-hidden border border-white/10 group-hover/card:border-violet-500 transition-colors shrink-0">
+                                            <img :src="member.photo ? '/storage/' + member.photo : 'https://ui-avatars.com/api/?name=' + member.name + '&background=random'"
+                                                class="w-full h-full object-cover">
                                         </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-
-                        <!-- Row 2: Scroll Right (Second Half) -->
-                        <div class="flex gap-4 animate-scroll-right w-max hover:[animation-play-state:paused] group/marquee"
-                            x-show="staff2.length > 0">
-                            <template x-for="i in 2">
-                                <div class="flex gap-4">
-                                    <template x-for="(member, index) in staff2" :key="'staff2-' + index">
-                                        <div
-                                            class="relative w-72 h-24 bg-slate-800/50 border border-white/5 rounded-2xl flex items-center p-3 gap-4 hover:bg-slate-800 transition-colors group/card shrink-0">
-                                            <div
-                                                class="w-16 h-16 rounded-xl overflow-hidden border border-white/10 group-hover/card:border-violet-500 transition-colors shrink-0">
-                                                <img :src="member.photo ? '/storage/' + member.photo : 'https://ui-avatars.com/api/?name=' + member.name + '&background=random'"
-                                                    class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="overflow-hidden">
-                                                <h4 class="text-white font-bold text-sm truncate" x-text="member.name"></h4>
-                                                <p class="text-slate-400 text-xs truncate" x-text="member.position"></p>
-                                                <p class="text-slate-600 text-[10px] truncate mt-1" x-text="member.nim"></p>
-                                            </div>
+                                        <div class="overflow-hidden">
+                                            <h4 class="text-white font-bold text-sm truncate" x-text="member.name"></h4>
+                                            <p class="text-slate-400 text-xs truncate" x-text="member.position"></p>
+                                            <p class="text-slate-600 text-[10px] truncate mt-1" x-text="member.nim"></p>
                                         </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div x-show="staff.length === 0"
-                        class="text-center py-12 border border-dashed border-white/10 rounded-2xl bg-white/5">
-                        <i class="fas fa-users-slash text-4xl text-slate-600 mb-4"></i>
-                        <p class="text-slate-500">Data fungsionaris belum tersedia.</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
                     </div>
                 </div>
-            </template>
-        </div>
 
-        <!-- ================= GALLERY SECTION (FADE IN) ================= -->
-        <div class="relative z-10 py-24 border-t border-white/5 bg-[#020617]">
-            <template x-if="currentPeriode">
-                <div class="max-w-7xl mx-auto px-4" x-data="{ shown: false }"
-                    x-init="new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){shown=true;o.disconnect()}}).observe($el)">
+                <!-- Empty State -->
+                <div x-show="staff.length === 0"
+                    class="text-center py-12 border border-dashed border-white/10 rounded-2xl bg-white/5">
+                    <i class="fas fa-users-slash text-4xl text-slate-600 mb-4"></i>
+                    <p class="text-slate-500">Data fungsionaris belum tersedia.</p>
+                </div>
+            </div>
+        </template>
+    </div>
 
-                    <div class="flex flex-col md:flex-row justify-between items-end mb-12"
-                        :class="shown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
-                        class="transition-all duration-1000 ease-out">
-                        <div>
-                            <h2 class="text-4xl font-bold font-outfit text-white mb-2">Our Gallery</h2>
-                            <p class="text-slate-400">Captured moments from this period.</p>
-                        </div>
-                        <div class="h-1 w-32 bg-gradient-to-r from-violet-500 to-transparent mt-4 md:mt-0"></div>
+    <!-- ================= GALLERY SECTION (FADE IN) ================= -->
+    <div class="relative z-10 py-24 border-t border-white/5 bg-[#020617]">
+        <template x-if="currentPeriode">
+            <div class="max-w-7xl mx-auto px-4" x-data="{ shown: false }"
+                x-init="new IntersectionObserver((e,o)=>{if(e[0].isIntersecting){shown=true;o.disconnect()}}).observe($el)">
+
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12"
+                    :class="shown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+                    class="transition-all duration-1000 ease-out">
+                    <div>
+                        <h2 class="text-4xl font-bold font-outfit text-white mb-2">Our Gallery</h2>
+                        <p class="text-slate-400">Captured moments from this period.</p>
+                    </div>
+                    <div class="h-1 w-32 bg-gradient-to-r from-violet-500 to-transparent mt-4 md:mt-0"></div>
+                </div>
+
+                <!-- Marquee / Carousel Section -->
+                <div class="relative w-full overflow-hidden marquee-mask" x-show="gallery.length > 0">
+
+                    <!-- Row 1: Scroll Left -->
+                    <div
+                        class="flex gap-4 mb-4 animate-scroll-left w-max hover:[animation-play-state:paused] group/marquee">
+                        <!-- Duplicate loop for seamless infinite scroll -->
+                        <template x-for="i in 2">
+                            <div class="flex gap-4">
+                                <template x-for="(photo, index) in gallery" :key="'row1-' + index">
+                                    <div
+                                        class="relative w-64 h-40 md:w-80 md:h-52 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 group/card">
+                                        <img :src="'/storage/' + photo.path"
+                                            class="w-full h-full object-cover transition duration-500 grayscale group-hover/card:grayscale-0 group-hover/card:scale-110">
+
+                                        <!-- Caption Overlay -->
+                                        <div
+                                            class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent translate-y-full group-hover/card:translate-y-0 transition duration-300">
+                                            <p class="text-xs text-white font-medium truncate"
+                                                x-text="photo.caption || 'Himafortic Gallery'"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
                     </div>
 
-                    <!-- Marquee / Carousel Section -->
-                    <div class="relative w-full overflow-hidden marquee-mask" x-show="gallery.length > 0">
+                    <!-- Row 2: Scroll Right -->
+                    <div class="flex gap-4 animate-scroll-right w-max hover:[animation-play-state:paused] group/marquee">
+                        <template x-for="i in 2">
+                            <div class="flex gap-4">
+                                <template x-for="(photo, index) in gallery" :key="'row2-' + index">
+                                    <div
+                                        class="relative w-64 h-40 md:w-80 md:h-52 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 group/card">
+                                        <img :src="'/storage/' + photo.path"
+                                            class="w-full h-full object-cover transition duration-500 grayscale group-hover/card:grayscale-0 group-hover/card:scale-110">
 
-                        <!-- Row 1: Scroll Left -->
-                        <div
-                            class="flex gap-4 mb-4 animate-scroll-left w-max hover:[animation-play-state:paused] group/marquee">
-                            <!-- Duplicate loop for seamless infinite scroll -->
-                            <template x-for="i in 2">
-                                <div class="flex gap-4">
-                                    <template x-for="(photo, index) in gallery" :key="'row1-' + index">
                                         <div
-                                            class="relative w-64 h-40 md:w-80 md:h-52 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 group/card">
-                                            <img :src="'/storage/' + photo.path"
-                                                class="w-full h-full object-cover transition duration-500 grayscale group-hover/card:grayscale-0 group-hover/card:scale-110">
-
-                                            <!-- Caption Overlay -->
-                                            <div
-                                                class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent translate-y-full group-hover/card:translate-y-0 transition duration-300">
-                                                <p class="text-xs text-white font-medium truncate"
-                                                    x-text="photo.caption || 'Himafortic Gallery'"></p>
-                                            </div>
+                                            class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent translate-y-full group-hover/card:translate-y-0 transition duration-300">
+                                            <p class="text-xs text-white font-medium truncate"
+                                                x-text="photo.caption || 'Himafortic Gallery'"></p>
                                         </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-
-                        <!-- Row 2: Scroll Right -->
-                        <div
-                            class="flex gap-4 animate-scroll-right w-max hover:[animation-play-state:paused] group/marquee">
-                            <template x-for="i in 2">
-                                <div class="flex gap-4">
-                                    <template x-for="(photo, index) in gallery" :key="'row2-' + index">
-                                        <div
-                                            class="relative w-64 h-40 md:w-80 md:h-52 rounded-xl overflow-hidden flex-shrink-0 border border-white/10 group/card">
-                                            <img :src="'/storage/' + photo.path"
-                                                class="w-full h-full object-cover transition duration-500 grayscale group-hover/card:grayscale-0 group-hover/card:scale-110">
-
-                                            <div
-                                                class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent translate-y-full group-hover/card:translate-y-0 transition duration-300">
-                                                <p class="text-xs text-white font-medium truncate"
-                                                    x-text="photo.caption || 'Himafortic Gallery'"></p>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div x-show="gallery.length === 0"
-                        class="text-center py-12 border border-dashed border-white/10 rounded-2xl bg-white/5">
-                        <i class="fas fa-images text-4xl text-slate-600 mb-4"></i>
-                        <p class="text-slate-500">Belum ada dokumentasi untuk periode ini.</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
                     </div>
                 </div>
-            </template>
-        </div>
+
+                <!-- Empty State -->
+                <div x-show="gallery.length === 0"
+                    class="text-center py-12 border border-dashed border-white/10 rounded-2xl bg-white/5">
+                    <i class="fas fa-images text-4xl text-slate-600 mb-4"></i>
+                    <p class="text-slate-500">Belum ada dokumentasi untuk periode ini.</p>
+                </div>
+            </div>
+        </template>
+    </div>
     </div>
 @endsection
