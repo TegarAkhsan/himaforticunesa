@@ -1,4 +1,3 @@
----
 deployment:
   tasks:
     - export DEPLOYPATH=/home/himafortic/public_html
