@@ -1,4 +1,4 @@
+---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/himafortic/public_html
-    - /bin/cp -R public/. $DEPLOYPATH
+    - /bin/cp -R public/. /home/himafortic/public_html/
