@@ -315,7 +315,7 @@
                 class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none">
             </div>
 
-            <div class="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-8">
+            <div class="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-20 md:pb-6">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
                     <!-- Brand Section -->
                     <div class="md:col-span-5 space-y-6">
@@ -412,6 +412,9 @@
                     <p class="text-slate-500 text-sm text-center md:text-left">
                         &copy; {{ date('Y') }} <span class="text-slate-300 font-semibold">HIMAFORTIC</span>. All rights
                         reserved.
+                        <span class="block md:inline mt-2 md:mt-0 text-slate-600 md:ml-4">
+                            Developed by <span class="text-slate-400">Tegar, Dickrullah</span>
+                        </span>
                     </p>
                     <div class="flex gap-6 text-sm text-slate-500">
                         <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
